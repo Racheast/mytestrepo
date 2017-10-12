@@ -47,7 +47,9 @@ csv
 function translate() {
 	console.log("Trying to connect to the engine at " + config.qlik_engine_url + " ...");
 	var app, global;
-	var objects = [];
+	var objects = [];  //needed for further processing
+	var dimensions = [];  //needed for further processing
+	
 	session.open()
 	.then(function (args) {
 		console.log("Connection successful.");
@@ -149,18 +151,35 @@ function translate() {
 			console.log("ERROR: app == undefined");
 		}
 	})
-	.then((dimensions) => {
+	.then((dimensions_received) => {
 		console.log("All dimensions received.");
 		var tasks = [];
-		for (var i=0; i < dimensions.length; i++) {
-			var dimension = dimensions[i];
-			var patches = [{
+		for (var i=0; i < dimensions_received.length; i++) {
+			var dimension = dimensions_received[i];
+			dimensions[dimension.id] = dimension;
+			
+			tasks.push(dimension.getProperties());
+		}
+		console.log("Trying to getProperties() for all dimensions ...");
+		return Promise.all(tasks);
+	})
+	.then((propertiesArray) => {
+		console.log("All properties received.");
+		tasks = [];
+		for(var i=0; i<propertiesArray.length; i++){
+			var properties = propertiesArray[i];
+			console.log("*** properties.qDim.title: " + properties.qDim.title);
+			if(properties.qDim.title in dictionary){
+				var dimension = dimensions[properties.qInfo.qId];
+				var patches = [{
 					'qPath': "/qDim/qFieldLabels",
 					'qOp': 'replace',
-					'qValue': "[\"SAMPLE LABEL NAME\"]"
+					'qValue': "[\"" + dictionary[properties.qDim.title] + "\"]"
 				}];
-			tasks.push(dimension.applyPatches(patches));	
+			tasks.push(dimension.applyPatches(patches));
+			}
 		}
+		console.log("Trying to apply dimension patches ...");
 		return Promise.all(tasks);
 	})
 	.then(() => {
