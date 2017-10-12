@@ -3,19 +3,17 @@ const WebSocket = require('ws');
 const path = require('path');
 const fs = require('fs');
 const schema = require('enigma.js/schemas/12.20.0.json');
-const langChoice = process.argv[2];
+
 var config = require('./config');
 var csv = require("fast-csv");
-var dictionary = [];
 
-console.log("language selection: " + langChoice);
+var dictionary = [];
+const langArgs = ["DE"];
+const langChoice = process.argv[2];
 
 const session = enigma.create({
   schema,
-  url: config.qlik_engine_url,  //  /engineData
-  // Notice the non-standard second parameter here, this is how you pass in
-  // additional configuration to the 'ws' npm library, if you use a different
-  // library you may configure this differently:
+  url: config.qlik_engine_url, 
   createSocket: url => new WebSocket(url)
 });
 
@@ -23,27 +21,38 @@ session.on('traffic:sent', data => console.log('sent:', data));
 session.on('traffic:received', data => {
 	console.log('received:', data);
 });
- 
-csv
- .fromPath(config.csv_filepath)
- .on("data", function(data){
-	if(langChoice == "DE"){
-		console.log("Writing dictionary: [" + data[0] + "]");
-		dictionary[data[0]] = data[2];
-	}
-	
- })
- .on("end", function(){  	//initiate subsequent translation logic here
-	console.log("Writing dictionary: finished");
-	console.log("Copying " + config.source_app_filepath + " into " + config.qvf_dir + config.getTargetAppFileName(langChoice) + " ...");
-	
-	var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.qvf_dir + config.getTargetAppFileName(langChoice)));
- 	streams.on('finish', function () {
-		console.log("Copying finished.");
-		translate();
-	});
-})
 
+if(process.argv.length == 3 ){
+	if(langArgs.indexOf(langChoice)>-1){		
+		start();
+	}else{
+		console.log("Invalid arguments! Please use one of the following arguments: " + langArgs + " .");
+	}
+}else{
+	console.log("Invalid command format! Please use the following format: node QlikSenseTranslator.js <language>");
+}
+
+function start(){ 
+	csv
+	 .fromPath(config.csv_filepath)
+	 .on("data", function(data){
+		if(langChoice == "DE"){
+			console.log("Writing dictionary: [" + data[0] + "]");
+			dictionary[data[0]] = data[2];
+		}
+		
+	 })
+	 .on("end", function(){  	//initiate subsequent translation logic here
+		console.log("Writing dictionary: finished");
+		console.log("Copying " + config.source_app_filepath + " into " + config.qvf_dir + config.getTargetAppFileName(langChoice) + " ...");
+		
+		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.qvf_dir + config.getTargetAppFileName(langChoice)));
+	 	streams.on('finish', function () {
+			console.log("Copying finished.");
+			translate();
+		});
+	})
+}
 function translate() {
 	console.log("Trying to connect to the engine at " + config.qlik_engine_url + " ...");
 	var app, global;
