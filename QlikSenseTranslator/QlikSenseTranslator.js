@@ -105,15 +105,42 @@ function translate() {
 		tasks = [];
 		for(var i=0; i<propertiesArray.length; i++){
 			var properties = propertiesArray[i];
-			if(properties.title in dictionary) {
-				var object = objects[properties.qInfo.qId];
-				var patches = [{
-						'qPath': '/title',
-						'qOp': 'add',
-						'qValue': "\"" + dictionary[properties.title] + "\""
-					}];
+			var object = objects[properties.qInfo.qId];
+			var patches = [];
+			
+			if(properties.hasOwnProperty('title')){
+				if(properties.title in dictionary) {
+					patches.push({
+							'qPath': '/title',
+							'qOp': 'add',
+							'qValue': "\"" + dictionary[properties.title] + "\""
+						});
+					
+				}	
+			}
+			
+			//check all HyperCubeDefs and so on...
+			if(properties.hasOwnProperty('qHyperCubeDef')){
+				console.log("*** ***** ****** Object.keys(properties): " + Object.keys(properties));
+				if(properties.qHyperCubeDef.hasOwnProperty('qMeasures') && properties.qHyperCubeDef.qMeasures.length > 0){
+					if(properties.qHyperCubeDef.qMeasures[0].hasOwnProperty('qDef')){
+					if(properties.qHyperCubeDef.qMeasures[0].qDef.hasOwnProperty('qLabel')){
+					patches.push({
+							"qPath": "/qHyperCubeDef/qMeasures/0/qDef/qLabel",
+							"qOp": 'replace',
+							"qValue": "\"123\""
+						});	
+					
+					console.log("*** *** *** qMeasures patch pushed for title=" + properties.title);	
+					}
+					}
+				}
+			}
+			
+			if(patches.length > 0){
 				tasks.push(object.applyPatches(patches,false));
-			}			
+			}
+			
 		}
 		console.log("Trying to apply title patches ...");
 		return Promise.all(tasks);
@@ -166,7 +193,6 @@ function translate() {
 		for (var i=0; i < dimensions_received.length; i++) {
 			var dimension = dimensions_received[i];
 			dimensions[dimension.id] = dimension;
-			
 			tasks.push(dimension.getProperties());
 		}
 		console.log("Trying to getProperties() for all dimensions ...");
@@ -177,7 +203,6 @@ function translate() {
 		tasks = [];
 		for(var i=0; i<propertiesArray.length; i++){
 			var properties = propertiesArray[i];
-			console.log("*** properties.qDim.title: " + properties.qDim.title);
 			if(properties.qDim.title in dictionary){
 				var dimension = dimensions[properties.qInfo.qId];
 				var patches = [{
@@ -190,7 +215,7 @@ function translate() {
 		}
 		console.log("Trying to apply dimension patches ...");
 		return Promise.all(tasks);
-	})
+	})	
 	.then(() => {
 		console.log("Trying doSave() ...");
 		return app.doSave();
