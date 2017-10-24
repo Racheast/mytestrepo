@@ -95,7 +95,15 @@ function translate() {
 	.then((sheets_received) => {
 		console.log("All sheets received.");
 		console.log("Starting to process each sheet ...");
-		
+		for(var i=0; i<sheets_received.length; i++){
+			var sheet = sheets_received[i];
+			console.log(" *** *** sheet: id=" + sheet.id + ", type=" + sheet.genericType);
+			/*
+			return sheet.getLayout().then((layout) => {
+				console.log(" *** *** layout = " + JSON.stringify(layout));
+			});
+			*/
+		}
 	})
 	
 	/* WORKING CODE, COMMENT IN LATER !

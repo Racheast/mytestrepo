@@ -31,6 +31,20 @@ module.exports = {
 		return tasks;
 	},
 	
+	getLayoutForAllSheets: function(sheets_received) {
+		var tasks = [];
+		for(var i=0; i<sheets_received.length; i++){
+			var sheet = sheets_received[i];
+			//TODO:  ... tasks.push(
+			/*
+			return sheet.getLayout().then((layout) => {
+				console.log(" *** *** layout = " + JSON.stringify(layout));
+			});
+			*/
+		}	
+		return tasks;
+	},
+	
 	getAllObjectsFromLayout: function(app, layout){
 		var tasks = [];
 		for (var i=0; i<layout.cells.length; i++){
