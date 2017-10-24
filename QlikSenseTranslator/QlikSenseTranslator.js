@@ -5,6 +5,7 @@ const fs = require('fs');
 const schema = require('enigma.js/schemas/12.20.0.json');
 
 var config = require('./config');
+var functions = require('./functions');
 var csv = require("fast-csv");
 
 var dictionary = [];
@@ -44,9 +45,9 @@ function start(){ 
 	 })
 	 .on("end", function(){  	//initiate subsequent translation logic here
 		console.log("Writing dictionary: finished");
-		console.log("Copying " + config.source_app_filepath + " into " + config.qvf_dir + config.getTargetAppFileName(langChoice) + " ...");
+		console.log("Copying " + config.source_app_filepath + " into " + config.target_app_dirpath + config.getTargetAppFileName(langChoice) + " ...");
 		
-		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.qvf_dir + config.getTargetAppFileName(langChoice)));
+		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.target_app_dirpath + config.getTargetAppFileName(langChoice)));
 	 	streams.on('finish', function () {
 			console.log("Copying finished.");
 			translate();
@@ -63,10 +64,10 @@ function translate() {
 	.then(function (args) {
 		console.log("Connection successful.");
 		global = args;
-		var target_app_filepath = config.qvf_dir + config.getTargetAppFileName(langChoice);
+		//var target_app_filepath = config.target_app_dirpath + config.getTargetAppFileName(langChoice);
 		
 		console.log("Trying to open the target app ...");
-		return global.openDoc(target_app_filepath, '', '', '', false);
+		return global.openDoc(config.getTargetAppFilePath(langChoice), '', '', '', false);
 	}).then(function (args) {
 		console.log("Target app opened successfully.");
 		app = args;
@@ -102,48 +103,8 @@ function translate() {
 	})
 	.then((propertiesArray) => {
 		console.log("All properties received.");
-		tasks = [];
-		for(var i=0; i<propertiesArray.length; i++){
-			var properties = propertiesArray[i];
-			var object = objects[properties.qInfo.qId];
-			var patches = [];
-			
-			if(properties.hasOwnProperty('title')){
-				if(properties.title in dictionary) {
-					patches.push({
-							'qPath': '/title',
-							'qOp': 'add',
-							'qValue': "\"" + dictionary[properties.title] + "\""
-						});
-					
-				}	
-			}
-			
-			//check all HyperCubeDefs and so on...
-			if(properties.hasOwnProperty('qHyperCubeDef')){
-				console.log("*** ***** ****** Object.keys(properties): " + Object.keys(properties));
-				if(properties.qHyperCubeDef.hasOwnProperty('qMeasures') && properties.qHyperCubeDef.qMeasures.length > 0){
-					if(properties.qHyperCubeDef.qMeasures[0].hasOwnProperty('qDef')){
-					if(properties.qHyperCubeDef.qMeasures[0].qDef.hasOwnProperty('qLabel')){
-					patches.push({
-							"qPath": "/qHyperCubeDef/qMeasures/0/qDef/qLabel",
-							"qOp": 'replace',
-							"qValue": "\"123\""
-						});	
-					
-					console.log("*** *** *** qMeasures patch pushed for title=" + properties.title);	
-					}
-					}
-				}
-			}
-			
-			if(patches.length > 0){
-				tasks.push(object.applyPatches(patches,false));
-			}
-			
-		}
-		console.log("Trying to apply title patches ...");
-		return Promise.all(tasks);
+		console.log("Trying to apply object patches ...");
+		return Promise.all(functions.getApplyPatchesTasksForObjectProperties(objects,propertiesArray,dictionary));
 	})
 	.then(() => {
 		console.log("Trying to create dimension list ...");
