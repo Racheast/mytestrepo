@@ -104,31 +104,17 @@ function translate() {
 	.then((propertiesArray) => {
 		console.log("All properties received.");
 		console.log("Trying to apply object patches ...");
-		return Promise.all(functions.getApplyPatchesTasksForObjectProperties(objects,propertiesArray,dictionary));
+		return Promise.all(functions.getApplyPatchesTasksForObjects(objects,propertiesArray,dictionary));
 	})
 	.then(() => {
 		console.log("Trying to create dimension list ...");
 		if(app != undefined) {
-			var dimensionListProperties = {
-				"qInfo": {
-					"qType": "DimensionList"
-				},
-				"qDimensionListDef": {
-					"qType": "dimension",
-					"qData": {
-						"title": "/title",
-						"tags": "/tags",
-						"grouping": "/qDim/qGrouping",
-						"info": "/qDimInfos"
-					}
-				}
-					
-			};
-			return app.createSessionObject(dimensionListProperties);
+			return app.createSessionObject(functions.getDimensionListProperties());
 		}else{
 			console.log("ERROR: app == undefined");
 		}
 	})
+	
 	.then((dimensionList) => {
 		console.log("Dimension list created.");
 		console.log("Trying to getLayout() from dimension list ...");
@@ -137,45 +123,18 @@ function translate() {
 	.then((layout) => {
 		console.log("Layout received.");
 		console.log("Trying to get all dimensions ...");
-		if(app != undefined){
-			var tasks = [];
-			for (var i=0; i < layout.qDimensionList.qItems.length; i++) {
-				item = layout.qDimensionList.qItems[i];
-				tasks.push(app.getDimension({qId:item.qInfo.qId}));
-			}
-			return Promise.all(tasks);
-		}else{
-			console.log("ERROR: app == undefined");
-		}
+		return Promise.all(functions.getDimensionsFromDimensionListLayout(app,layout));
 	})
+	
 	.then((dimensions_received) => {
 		console.log("All dimensions received.");
-		var tasks = [];
-		for (var i=0; i < dimensions_received.length; i++) {
-			var dimension = dimensions_received[i];
-			dimensions[dimension.id] = dimension;
-			tasks.push(dimension.getProperties());
-		}
 		console.log("Trying to getProperties() for all dimensions ...");
-		return Promise.all(tasks);
+		return Promise.all(functions.getPropertiesForAllDimensions(dimensions, dimensions_received));
 	})
 	.then((propertiesArray) => {
 		console.log("All properties received.");
-		tasks = [];
-		for(var i=0; i<propertiesArray.length; i++){
-			var properties = propertiesArray[i];
-			if(properties.qDim.title in dictionary){
-				var dimension = dimensions[properties.qInfo.qId];
-				var patches = [{
-					'qPath': "/qDim/qFieldLabels",
-					'qOp': 'replace',
-					'qValue': "[\"" + dictionary[properties.qDim.title] + "\"]"
-				}];
-			tasks.push(dimension.applyPatches(patches));
-			}
-		}
 		console.log("Trying to apply dimension patches ...");
-		return Promise.all(tasks);
+		return Promise.all(functions.getApplyPatchesTasksForDimensions(dimensions,propertiesArray,dictionary));
 	})	
 	.then(() => {
 		console.log("Trying doSave() ...");

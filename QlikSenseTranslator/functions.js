@@ -1,5 +1,5 @@
 module.exports = {
-	getApplyPatchesTasksForObjectProperties: function(objects, propertiesArray, dictionary){
+	getApplyPatchesTasksForObjects: function(objects, propertiesArray, dictionary){
 		tasks = [];
 		for(var i=0; i<propertiesArray.length; i++){
 			var properties = propertiesArray[i];
@@ -59,5 +59,61 @@ module.exports = {
 			}
 		}
 		return tasks;
+	},
+	
+	getDimensionListProperties: function(){
+		var dimensionListProperties =	{
+				"qInfo": {
+					"qType": "DimensionList"
+				},
+				"qDimensionListDef": {
+					"qType": "dimension",
+					"qData": {
+						"title": "/title",
+						"tags": "/tags",
+						"grouping": "/qDim/qGrouping",
+						"info": "/qDimInfos"
+					}
+				}
+					
+		};
+		
+		return dimensionListProperties;
+	},
+	
+	getDimensionsFromDimensionListLayout: function(app,layout) {
+		var tasks = [];
+		for (var i=0; i < layout.qDimensionList.qItems.length; i++) {
+			item = layout.qDimensionList.qItems[i];
+			tasks.push(app.getDimension({qId:item.qInfo.qId}));
+		}
+		return tasks;
+	},
+	
+	getPropertiesForAllDimensions: function(dimensions, dimensions_received){
+		var tasks = [];
+		for (var i=0; i < dimensions_received.length; i++) {
+			var dimension = dimensions_received[i];
+			dimensions[dimension.id] = dimension;
+			tasks.push(dimension.getProperties());
+		}
+		return tasks;
+	},
+	
+	getApplyPatchesTasksForDimensions: function(dimensions, propertiesArray, dictionary){
+		tasks = [];
+		for(var i=0; i<propertiesArray.length; i++){
+			var properties = propertiesArray[i];
+			if(properties.qDim.title in dictionary){
+				var dimension = dimensions[properties.qInfo.qId];
+				var patches = [{
+					'qPath': "/qDim/qFieldLabels",
+					'qOp': 'replace',
+					'qValue': "[\"" + dictionary[properties.qDim.title] + "\"]"
+				}];
+			tasks.push(dimension.applyPatches(patches));
+			}
+		}
+		return tasks;
 	}
-};
+}
