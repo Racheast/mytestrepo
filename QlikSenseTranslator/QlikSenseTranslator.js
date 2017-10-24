@@ -90,16 +90,10 @@ function translate() {
 			}else{
 				console.log("ERROR: app == undefined");
 			}	
-	}).then((received_objects) => {
+	}).then((objects_received) => {
 			console.log("All objects received.");
-			var tasks = [];
-			for(var i=0;i<received_objects.length;i++){
-				var object = received_objects[i];
-				objects[object.id] = object;  //needed for further processing
-				tasks.push(object.getProperties());
-			}
 			console.log("Trying to getProperties() of all objects");
-			return Promise.all(tasks);
+			return Promise.all(functions.getPropertiesForAllObjects(objects,objects_received));
 	})
 	.then((propertiesArray) => {
 		console.log("All properties received.");

@@ -1,4 +1,14 @@
 module.exports = {
+	getPropertiesForAllObjects: function(objects,objects_received){
+		var tasks = [];
+		for(var i=0;i<objects_received.length;i++){
+			var object = objects_received[i];
+			objects[object.id] = object;  //needed for further processing
+			tasks.push(object.getProperties());
+		}
+		return tasks;
+	},
+	
 	getApplyPatchesTasksForObjects: function(objects, propertiesArray, dictionary){
 		tasks = [];
 		for(var i=0; i<propertiesArray.length; i++){
