@@ -35,12 +35,7 @@ module.exports = {
 		var tasks = [];
 		for(var i=0; i<sheets_received.length; i++){
 			var sheet = sheets_received[i];
-			//TODO:  ... tasks.push(
-			/*
-			return sheet.getLayout().then((layout) => {
-				console.log(" *** *** layout = " + JSON.stringify(layout));
-			});
-			*/
+			tasks.push(sheet.getLayout());
 		}	
 		return tasks;
 	},
