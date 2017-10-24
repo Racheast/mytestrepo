@@ -80,16 +80,7 @@ function translate() {
     }).then(function(layout) {
 			console.log("Layout received");
 			console.log("Trying to get all objects from layout ...");
-			if(app != undefined){	
-				var tasks = [];
-				for (var i=0; i<layout.cells.length; i++){
-					var cell = layout.cells[i];
-					tasks.push(app.getObject({qId:cell.name}));
-				}
-				return Promise.all(tasks);
-			}else{
-				console.log("ERROR: app == undefined");
-			}	
+			return Promise.all(functions.getAllObjectsFromLayout(app, layout));
 	}).then((objects_received) => {
 			console.log("All objects received.");
 			console.log("Trying to getProperties() of all objects");

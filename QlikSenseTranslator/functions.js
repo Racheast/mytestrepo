@@ -1,4 +1,13 @@
 module.exports = {
+	getAllObjectsFromLayout: function(app, layout){
+		var tasks = [];
+		for (var i=0; i<layout.cells.length; i++){
+			var cell = layout.cells[i];
+			tasks.push(app.getObject({qId:cell.name}));
+		}
+		return tasks;
+	},
+	
 	getPropertiesForAllObjects: function(objects,objects_received){
 		var tasks = [];
 		for(var i=0;i<objects_received.length;i++){
