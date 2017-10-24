@@ -3,3 +3,11 @@ ti_1,text-image,Text-Bild
 hlw_1,hello-world,Hallo-Welt
 tbl_1,table,Tabelle
 dm_1,dummy,Dummkopf
+sv_1,sample_variable2,Beispielsvariable2
+d_Lz_DatumUndWochentag,DateAndWeekDay,DatumUndWochentag
+d_Lz_Beginn,PresentationBeginning,Vorstellungsbeginn
+d_Vorstellung,Presentation,Vorstellungsbeginn
+d_Preiskategorie,PriceCategory,Preiskategorie
+d_platzkapazitaet,SeatCapacity,Platzkapazität
+d_tickets,Tickets,Eintrittskarten
+d_auslastung,Usage,Auslastung
