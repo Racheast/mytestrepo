@@ -54,6 +54,7 @@ function start(){ 
 		});
 	})
 }
+
 function translate() {
 	console.log("Trying to connect to the engine at " + config.qlik_engine_url + " ...");
 	var app, global;
@@ -61,19 +62,44 @@ function translate() {
 	var dimensions = [];  //needed for further processing
 	
 	session.open()
-	.then(function (args) {
+	.then(function (global_received) {
 		console.log("Connection successful.");
-		global = args;
-		//var target_app_filepath = config.target_app_dirpath + config.getTargetAppFileName(langChoice);
-		
+		global = global_received;		
 		console.log("Trying to open the target app ...");
 		return global.openDoc(config.getTargetAppFilePath(langChoice), '', '', '', false);
-	}).then(function (args) {
+	}).then(function (app_received) {
 		console.log("Target app opened successfully.");
-		app = args;
+		app = app_received;
 		console.log("Trying to get sheet " + config.qlik_targetApp_sheet + " ...");
-		return app.getObject({ qId: config.qlik_targetApp_sheet });
-	}).then(function (sheet) {  //sheet
+		
+		/*
+		  GET ALL SHEETS HERE AND ITERATE OVER EACH
+		*/
+		//return app.getObject({ qId: config.qlik_targetApp_sheet });
+		console.log("Trying to create sheet list ...");
+		return app.createSessionObject(functions.getSheetListProperties());
+	})
+	
+	.then((sheetList) => {
+		console.log("Sheet list received ...");
+		console.log("Trying to get layout from sheet list ...");
+		return sheetList.getLayout();
+	})
+	
+	.then((layout) => {
+		console.log("Sheet list layout received.");
+		console.log("Trying to get all sheets ...");
+		return Promise.all(functions.getSheetsFromSheetListLayout(app,layout));
+	})
+	
+	.then((sheets_received) => {
+		console.log("All sheets received.");
+		console.log("Starting to process each sheet ...");
+		
+	})
+	
+	/* WORKING CODE, COMMENT IN LATER !
+	.then(function (sheet) {  //sheet
             console.log("Sheet " + sheet.id + " received.");
             console.log("Trying to getLayout() from sheet ...");
 			return sheet.getLayout();
@@ -93,13 +119,8 @@ function translate() {
 	})
 	.then(() => {
 		console.log("Trying to create dimension list ...");
-		if(app != undefined) {
-			return app.createSessionObject(functions.getDimensionListProperties());
-		}else{
-			console.log("ERROR: app == undefined");
-		}
+		return app.createSessionObject(functions.getDimensionListProperties());
 	})
-	
 	.then((dimensionList) => {
 		console.log("Dimension list created.");
 		console.log("Trying to getLayout() from dimension list ...");
@@ -120,7 +141,10 @@ function translate() {
 		console.log("All properties received.");
 		console.log("Trying to apply dimension patches ...");
 		return Promise.all(functions.getApplyPatchesTasksForDimensions(dimensions,propertiesArray,dictionary));
-	})	
+	})
+
+	*/
+	
 	.then(() => {
 		console.log("Trying doSave() ...");
 		return app.doSave();

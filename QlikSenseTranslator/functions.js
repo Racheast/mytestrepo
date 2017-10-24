@@ -1,4 +1,36 @@
 module.exports = {
+	getSheetListProperties: function(){
+		var sheetListProperties =	{
+				"qInfo": {
+					"qType": "SheetList"
+				},
+				"qAppObjectListDef": {
+					"qType": "sheet",
+					"qData": {
+						"title": "/qMetaDef/title",
+						"description": "/qMetaDef/description",
+						"thumbnail": "/thumbnail",
+						"cells": "/cells",
+						"rank": "/rank",
+						"columns": "/columns",
+						"rows": "/rows"
+					}
+				}
+					
+		};
+		
+		return sheetListProperties;
+	},
+	
+	getSheetsFromSheetListLayout: function(app,layout) {
+		var tasks = [];
+		for (var i=0; i < layout.qAppObjectList.qItems.length; i++) {
+			item = layout.qAppObjectList.qItems[i];
+			tasks.push(app.getObject({qId:item.qInfo.qId}));
+		}
+		return tasks;
+	},
+	
 	getAllObjectsFromLayout: function(app, layout){
 		var tasks = [];
 		for (var i=0; i<layout.cells.length; i++){
