@@ -45,9 +45,13 @@ async function f1() {
   var x = await resolveAfter2Seconds(10);
   console.log(x); // 10
 }
+async function f2() {
+	console.log("starting f2");
+	var sheetIds = await getSheets();
+	console.log("*** *** await finished. sheetIds: " + sheetIds);
+}
 
-
-function start(){ 
+function start(){   
 	csv
 	 .fromPath(config.csv_filepath)
 	 .on("data", function(data){
@@ -64,12 +68,57 @@ function start(){ 
 		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.target_app_dirpath + config.getTargetAppFileName(langChoice)));
 	 	streams.on('finish', function () {
 			console.log("Copying finished.\n");
-			getAllSheets();
+			//var sheetIds = await getSheets();
+			//translateSheets(session,global,app,sheetIds);
 			//f1();
+			f2();
 		});
 	})
 }
 
+function getSheets(){
+	return new Promise(resolve => {
+		console.log("Starting getAllSheets() ...");
+		
+		var sheetIds = [];
+		var app, global;
+		session.open()
+		.then((global_received) => {
+			console.log("Connection successful.");
+			global = global_received;
+			return global.openDoc(config.getTargetAppFilePath(langChoice), '', '', '', false);
+		})
+		.then((app_received) => {
+			console.log("Target app opened successfully.");
+			console.log("Trying to create sheetlist ... ");
+			app = app_received;
+			return app.createSessionObject(functions.getSheetListProperties());
+		})
+		.then((sheetList) => {
+			console.log("Sheet list received ...");
+			console.log("Trying to get layout from sheet list ...");
+			return sheetList.getLayout();
+		})
+		.then((layout) => {
+			for(var i=0; i<layout.qAppObjectList.qItems.length; i++){
+				var qItem = layout.qAppObjectList.qItems[i];
+				sheetIds.push(qItem.qInfo.qId);
+			}
+		})
+		.then(() => {
+			console.log("getAllSheets() finished.\n");
+			resolve(sheetIds);
+			session.close();
+		})
+		.catch(function (error) {
+				console.log(error);
+				console.log("getSheetIds has not finished successfully!\nClosing the session ...\n");
+				session.close();
+		});
+	});
+}
+
+/*
 function getAllSheets(){
 	console.log("Starting getAllSheets() ...");
 	var sheetIds = [];
@@ -112,6 +161,7 @@ function getAllSheets(){
 			session.close();
     });
 }
+*/
 
 function translateSheets(session,global,app,sheetIds) {
 	var sheetId = sheetIds.pop();
