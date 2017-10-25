@@ -27,7 +27,7 @@ if(process.argv.length == 3 ){
 	langChoice = process.argv[2];
 
 	if(langArgs.indexOf(langChoice)>-1){		
-		startApp();
+		start();
 	}else{
 		console.log("Invalid arguments! Please use one of the following arguments: " + langArgs + " .");
 	}
@@ -35,30 +35,10 @@ if(process.argv.length == 3 ){
 	console.log("Invalid command format! Please use the following format: node QlikSenseTranslator.js <language>");
 }
 
-function startApp(){   
-	csv
-	 .fromPath(config.csv_filepath)
-	 .on("data", function(data){
-		if(langChoice == "DE"){
-			console.log("Writing dictionary: [" + data[0] + "]");
-			dictionary[data[0]] = data[2];
-		}
-		
-	 })
-	 .on("end", function(){  	//initiate subsequent translation logic here
-		console.log("Writing dictionary: finished");
-		console.log("Copying " + config.source_app_filepath + " into " + config.target_app_dirpath + config.getTargetAppFileName(langChoice) + " ...");
-		
-		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.target_app_dirpath + config.getTargetAppFileName(langChoice)));
-	 	streams.on('finish', function () {
-			console.log("Copying finished.\n");
-			initTranslation();
-		});
-	})
-}
-
-async function initTranslation() {
-	console.log("starting f2");
+async function start() {
+	console.log("Starting the application ...");
+	await writeDictionary();
+	await copyApp();
 	var global = await openConnection(session);
 	var app = await getApp(global);
 	var sheetIds = await getAllSheets(app);
@@ -70,6 +50,36 @@ async function initTranslation() {
 	console.log("Closing the session ...");
 	
 	session.close();
+}
+
+function copyApp(){
+	return new Promise(resolve => {
+		console.log("Copying " + config.source_app_filepath + " into " + config.target_app_dirpath + config.getTargetAppFileName(langChoice) + " ...");
+		
+		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.target_app_dirpath + config.getTargetAppFileName(langChoice)));
+	 	streams.on('finish', function () {
+			console.log("Copying finished.\n");
+			resolve();
+		});
+	});
+}
+
+function writeDictionary(){
+	return new Promise(resolve => {
+		csv
+		 .fromPath(config.csv_filepath)
+		 .on("data", function(data){
+			if(langChoice == "DE"){
+				console.log("Writing dictionary: [" + data[0] + "]");
+				dictionary[data[0]] = data[2];
+			}
+			
+		 })
+		 .on("end", function(){  	//initiate subsequent translation logic here
+			console.log("Writing dictionary: finished");
+			resolve();
+		})
+	});
 }
 
 function openConnection(s){
