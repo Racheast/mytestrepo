@@ -4,15 +4,13 @@ const path = require('path');
 const fs = require('fs');
 const schema = require('enigma.js/schemas/12.20.0.json');
 
-var async = require("async");
 var config = require('./config');
 var functions = require('./functions');
 var csv = require("fast-csv");
 
 var dictionary = [];
 const langArgs = ["DE"];
-const langChoice = process.argv[2];
-
+var langChoice;
 const session = enigma.create({
   schema,
   url: config.qlik_engine_url, 
@@ -25,6 +23,8 @@ session.on('traffic:received', data => {
 });
 
 if(process.argv.length == 3 ){
+	langChoice = process.argv[2];
+
 	if(langArgs.indexOf(langChoice)>-1){		
 		start();
 	}else{
@@ -51,81 +51,64 @@ function start(){ 
 		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.target_app_dirpath + config.getTargetAppFileName(langChoice)));
 	 	streams.on('finish', function () {
 			console.log("Copying finished.");
-			translate();
-			//test();
+			getAllSheets();
 		});
 	})
 }
 
-function test(){
-	var anArray = [];
-
-	var testObj = {
-		'a': '1',
-		'b': '2',
-		'c': '3'
-	};
-
-	async.forEachOf(testObj, function (elem, key, callback) {
-		console.log(elem);
-		anArray.push(elem);
-		callback();
-	}, function (err) {
-		if (err) {
-			console.error(err.message);
-		}
-
-		console.log("This line should be printed at the end.", anArray);
-	});
-}
-
-function translate() {
-	console.log("Trying to connect to the engine at " + config.qlik_engine_url + " ...");
+function getAllSheets(){
+	console.log("Starting getAllSheets() ...");
+	var sheetIds = [];
 	var app, global;
-	var objects = [];  //needed for further processing
-	var dimensions = [];  //needed for further processing
-	
 	session.open()
-	.then(function (global_received) {
+	.then((global_received) => {
 		console.log("Connection successful.");
-		global = global_received;		
-		console.log("Trying to open the target app ...");
+		global = global_received;
 		return global.openDoc(config.getTargetAppFilePath(langChoice), '', '', '', false);
-	}).then(function (app_received) {
+	})
+	.then((app_received) => {
 		console.log("Target app opened successfully.");
+		console.log("Trying to create sheetlist ... ");
 		app = app_received;
-		console.log("Trying to get sheet " + config.qlik_targetApp_sheet + " ...");
-		
-		/*
-		  GET ALL SHEETS HERE AND ITERATE OVER EACH
-		*/
-		//return app.getObject({ qId: config.qlik_targetApp_sheet });
-		console.log("Trying to create sheet list ...");
 		return app.createSessionObject(functions.getSheetListProperties());
 	})
-	
 	.then((sheetList) => {
 		console.log("Sheet list received ...");
 		console.log("Trying to get layout from sheet list ...");
 		return sheetList.getLayout();
 	})
-	
 	.then((layout) => {
-		console.log("Sheet list layout received.");
-		console.log("Trying to get all sheets ...");
-		return Promise.all(functions.getSheetsFromSheetListLayout(app,layout));
-	})
-	
-	.then((sheets_received) => {
-		console.log("All sheets received.");
-		console.log("Starting to process each sheet ...");
-		return Promise.all(functions.getLayoutForAllSheets(sheets_received));
-	})
-	
-	.then((layoutArray) => {
+		for(var i=0; i<layout.qAppObjectList.qItems.length; i++){
+			var qItem = layout.qAppObjectList.qItems[i];
+			sheetIds.push(qItem.qInfo.qId);
+		}
+	}).then(() => {
+		console.log("getAllSheets() finished.\n");
 		
+		if(sheetIds.length > 0){
+			translateSheets(session,global,app,sheetIds);
+		}else{
+			console.log("No sheets were found in the app.\nClosing the session ...\n");
+			session.close();
+		}
 	})
-	/* WORKING CODE, COMMENT IN LATER !
+	.catch(function (error) {
+            console.log(error);
+			console.log("getSheetIds has not finished successfully!\nClosing the session ...\n");
+			session.close();
+    });
+}
+
+function translateSheets(session,global,app,sheetIds) {
+	var sheetId = sheetIds.pop();
+	console.log("Starting translateSheets() for sheetId " + sheetId + " ... ");
+	console.log("Trying to connect to the engine at " + config.qlik_engine_url + " ...");
+
+	var objects = [];  //needed for further processing
+	var dimensions = [];  //needed for further processing
+	
+	
+	app.getObject({qId:sheetId})
 	.then(function (sheet) {  //sheet
             console.log("Sheet " + sheet.id + " received.");
             console.log("Trying to getLayout() from sheet ...");
@@ -170,19 +153,21 @@ function translate() {
 		return Promise.all(functions.getApplyPatchesTasksForDimensions(dimensions,propertiesArray,dictionary));
 	})
 
-	*/
-	
 	.then(() => {
 		console.log("Trying doSave() ...");
 		return app.doSave();
 	})
 	.then(() => {
-		console.log("Closing the session ...");
-		session.close();	
+		if(sheetIds.length>0){
+			translateSheets(session,global,app,sheetIds);
+		}else{
+			console.log("Closing the session ... \n");
+			session.close();
+		}
 	})
 	.catch(function (error) {
             console.log(error);
-			console.log("Translation has not finished successfully!\nClosing the session ...");
+			console.log("Translation has not finished successfully!\nClosing the session ...\n");
 			session.close();
     });
 }
