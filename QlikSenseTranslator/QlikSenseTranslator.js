@@ -7,7 +7,7 @@ var config = require('./config');
 var functions = require('./functions');
 var csv = require("fast-csv");
 var dictionary = [];
-const langArgs = ["DE"];
+const langArgs = ["DE", "EN"];
 var langChoice;
 const session = enigma.create({
   schema,
@@ -63,6 +63,9 @@ function writeDictionary(){
 		 .fromPath(config.csv_filepath, {delimiter: ';'})
 		 .on("data", function(data){
 			if(langChoice == "DE"){
+				console.log("Writing dictionary: [" + data[0] + "]");
+				dictionary[data[0]] = data[1];
+			}else if(langChoice == "EN"){
 				console.log("Writing dictionary: [" + data[0] + "]");
 				dictionary[data[0]] = data[2];
 			}
