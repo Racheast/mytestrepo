@@ -11,6 +11,7 @@ var csv = require("fast-csv");
 var dictionary = [];
 const langArgs = ["DE"];
 var langChoice;
+
 const session = enigma.create({
   schema,
   url: config.qlik_engine_url, 
@@ -34,6 +35,18 @@ if(process.argv.length == 3 ){
 	console.log("Invalid command format! Please use the following format: node QlikSenseTranslator.js <language>");
 }
 
+function resolveAfter2Seconds(x) { 
+  return new Promise(resolve => {
+    resolve(x)
+  });
+}
+
+async function f1() {
+  var x = await resolveAfter2Seconds(10);
+  console.log(x); // 10
+}
+
+
 function start(){ 
 	csv
 	 .fromPath(config.csv_filepath)
@@ -50,8 +63,9 @@ function start(){ 
 		
 		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.target_app_dirpath + config.getTargetAppFileName(langChoice)));
 	 	streams.on('finish', function () {
-			console.log("Copying finished.");
+			console.log("Copying finished.\n");
 			getAllSheets();
+			//f1();
 		});
 	})
 }
