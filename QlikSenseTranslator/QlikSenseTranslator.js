@@ -44,12 +44,13 @@ async function start() {
 	}
 	console.log("Closing the session ...");
 	session.close();
+	
 }
 
 function copyApp(){
 	return new Promise(resolve => {
-		console.log("Copying " + config.source_app_filepath + " into " + config.target_app_dirpath + config.getTargetAppFileName(langChoice) + " ...");
-		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.target_app_dirpath + config.getTargetAppFileName(langChoice)));
+		console.log("Copying " + config.source_app_filepath + " into " + config.getTargetAppFilePath(langChoice) + " ...");
+		var streams = fs.createReadStream(config.source_app_filepath).pipe(fs.createWriteStream(config.getTargetAppFilePath(langChoice)));
 	 	streams.on('finish', function () {
 			console.log("Copying finished.\n");
 			resolve();
