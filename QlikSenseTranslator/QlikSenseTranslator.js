@@ -136,15 +136,28 @@ function translateSheet(app,sheetId) {
 
 		var objects = [];  //needed for further processing
 		var dimensions = [];  //needed for further processing
-		
+		var sheet;
 		console.log("Trying to get sheet with id " + sheetId);
 		app.getObject({qId:sheetId})
-		.then(function (sheet) {  //sheet
+		.then((sheet_received) => {  //sheet
+				sheet = sheet_received;
 				console.log("Sheet " + sheet.id + " received.");
-				console.log("Trying to getLayout() from sheet ...");
-				return sheet.getLayout();
-		}).then(function(layout) {
-				console.log("Layout received");
+				console.log("Trying to getProperties() for sheet ...");
+				return sheet.getProperties();
+		})
+		.then((properties) => {
+			console.log("Properties received.");
+			console.log("Trying to apply patches on sheet ...");
+			var patches = functions.getApplyPatchesTaskForSheet(properties,dictionary);
+			if(patches.length > 0){	
+				return sheet.applyPatches(functions.getApplyPatchesTaskForSheet(properties,dictionary));
+			}
+		})
+		.then(() => {
+			return sheet.getLayout();
+		})
+		.then((layout) => {
+				console.log("Layout received.");
 				console.log("Trying to get all objects from layout ...");
 				return Promise.all(functions.getAllObjectsFromLayout(app, layout));
 		}).then((objects_received) => {
@@ -182,7 +195,7 @@ function translateSheet(app,sheetId) {
 			console.log("Trying to apply dimension patches ...");
 			return Promise.all(functions.getApplyPatchesTasksForDimensions(dimensions,propertiesArray,dictionary));
 		})
-
+		
 		.then(() => {
 			console.log("Trying doSave() ...");
 			return app.doSave();

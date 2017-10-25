@@ -161,7 +161,7 @@ module.exports = {
 	},
 	
 	getApplyPatchesTasksForDimensions: function(dimensions, propertiesArray, dictionary){
-		tasks = [];
+		var tasks = [];
 		for(var i=0; i<propertiesArray.length; i++){
 			var properties = propertiesArray[i];
 			if(properties.qDim.title in dictionary){
@@ -175,5 +175,30 @@ module.exports = {
 			}
 		}
 		return tasks;
+	},
+	//TODO TEST
+	getApplyPatchesTaskForSheet: function(properties, dictionary){
+		var patches = [];
+		if(properties.qMetaDef.title in dictionary){
+			console.log("*** *** " + properties.qMetaDef.title + " in dictionary !!"); 
+			patches.push(
+				{
+					'qPath': "/qMetaDef/title",
+					'qOp': 'replace',
+					'qValue': "\"" + dictionary[properties.qMetaDef.title] + "\""
+				}
+			);
+		}
+		if(properties.qMetaDef.description in dictionary){
+			patches.push(
+				{
+					'qPath': "/qMetaDef/description",
+					'qOp': 'replace',
+					'qValue': "\"" + dictionary[properties.qMetaDef.description] + "\""
+				}
+			);
+		}
+		
+		return patches;
 	}
 }
