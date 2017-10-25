@@ -193,6 +193,7 @@ function translateSheet(app,sheetId) {
 		.then((propertiesArray) => {
 			console.log("All properties received.");
 			console.log("Trying to apply dimension patches ...");
+			
 			return Promise.all(functions.getApplyPatchesTasksForDimensions(dimensions,propertiesArray,dictionary));
 		})
 		
