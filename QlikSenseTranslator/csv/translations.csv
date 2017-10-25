@@ -11,3 +11,7 @@ d_Preiskategorie,PriceCategory,Preiskategorie
 d_platzkapazitaet,SeatCapacity,Platzkapazität
 d_tickets,Tickets,Eintrittskarten
 d_auslastung,Usage,Auslastung
+d_MonatWochentag,MonthWeekDay,MonatWochentag
+d_VorstellungsdatumWochentag,PresentationDateWeekDay,VorstellungsDat/Wochentag
+d_WochentagVorstellungsdatum,WeekDayPresentationDate,Wochentag/Vorstellungsdatum
+d_Beginn,Beginning,Beginn
