@@ -49,78 +49,6 @@ module.exports = {
 		return tasks;
 	},
 	
-	getPropertiesForAllObjects: function(objects,objects_received){
-		var tasks = [];
-		for(var i=0;i<objects_received.length;i++){
-			var object = objects_received[i];
-			objects[object.id] = object;  //needed for further processing
-			tasks.push(object.getProperties());
-		}
-		return tasks;
-	},
-	
-	getApplyPatchesTasksForObjects: function(objects, propertiesArray, dictionary){
-		tasks = [];
-		for(var i=0; i<propertiesArray.length; i++){
-			var properties = propertiesArray[i];
-			var object = objects[properties.qInfo.qId];
-			var patches = [];
-			
-			if(properties.hasOwnProperty('title')){
-				if(properties.title in dictionary) {
-					patches.push({
-							'qPath': '/title',
-							'qOp': 'add',
-							'qValue': "\"" + dictionary[properties.title] + "\""
-					});
-					
-				}	
-			}
-			
-			//check all subnodes of HyperCubeDefs ...
-			if(properties.hasOwnProperty('qHyperCubeDef')){
-				
-				//check all qMeasures
-				if(properties.qHyperCubeDef.hasOwnProperty('qMeasures')){
-					for(var j=0; j<properties.qHyperCubeDef.qMeasures.length; j++){
-						var measure = properties.qHyperCubeDef.qMeasures[j];
-						if(measure.hasOwnProperty('qDef') && measure.qDef.hasOwnProperty('qLabel')){
-							if(measure.qDef.qLabel in dictionary){
-								patches.push({
-									"qPath": "/qHyperCubeDef/qMeasures/" + j + "/qDef/qLabel",
-									"qOp": "replace",
-									"qValue": "\"" + dictionary[measure.qDef.qLabel] + "\""
-								});	
-							}
-						}
-					}	
-				}
-				
-				//check all qDimensions
-				if(properties.qHyperCubeDef.hasOwnProperty('qDimensions')){	
-					for(var j=0; j<properties.qHyperCubeDef.qDimensions.length; j++){
-						var dimension = properties.qHyperCubeDef.qDimensions[j];
-						if(dimension.hasOwnProperty('qDef') && dimension.qDef.hasOwnProperty('qFieldLabels') && dimension.qDef.qFieldLabels.length == 1){
-							if(dimension.qDef.qFieldLabels[0] in dictionary){
-								patches.push({
-									"qPath" : "/qHyperCubeDef/qDimensions/" + j + "/qDef/qFieldLabels",
-									"qOp" : "replace",
-									"qValue" : "[\"" + dictionary[dimension.qDef.qFieldLabels[0]] + "\"]"
-								});
-							}
-						}
-					}
-					
-				}
-				
-			}
-			if(patches.length > 0){
-				tasks.push(object.applyPatches(patches,false));
-			}
-		}
-		return tasks;
-	},
-	
 	getDimensionListProperties: function(){
 		var dimensionListProperties =	{
 				"qInfo": {
@@ -202,60 +130,78 @@ module.exports = {
 	},
 	
 	getApplyPatchesForObject: function(properties, dictionary){
-		tasks = [];
-		
+		var patches = [];
 			
-			var patches = [];
+		if(properties.hasOwnProperty('title')){
+			if(properties.title in dictionary) {
+				patches.push({
+						'qPath': '/title',
+						'qOp': 'add',
+						'qValue': "\"" + dictionary[properties.title] + "\""
+				});		
+			}	
+		}
 			
-			if(properties.hasOwnProperty('title')){
-				if(properties.title in dictionary) {
-					patches.push({
-							'qPath': '/title',
-							'qOp': 'add',
-							'qValue': "\"" + dictionary[properties.title] + "\""
-					});
-					
-				}	
-			}
-			
-			//check all subnodes of HyperCubeDefs ...
-			if(properties.hasOwnProperty('qHyperCubeDef')){
-				
-				//check all qMeasures
-				if(properties.qHyperCubeDef.hasOwnProperty('qMeasures')){
-					for(var j=0; j<properties.qHyperCubeDef.qMeasures.length; j++){
-						var measure = properties.qHyperCubeDef.qMeasures[j];
-						if(measure.hasOwnProperty('qDef') && measure.qDef.hasOwnProperty('qLabel')){
-							if(measure.qDef.qLabel in dictionary){
-								patches.push({
-									"qPath": "/qHyperCubeDef/qMeasures/" + j + "/qDef/qLabel",
-									"qOp": "replace",
-									"qValue": "\"" + dictionary[measure.qDef.qLabel] + "\""
-								});	
-							}
-						}
-					}	
-				}
-				
-				//check all qDimensions
-				if(properties.qHyperCubeDef.hasOwnProperty('qDimensions')){	
-					for(var j=0; j<properties.qHyperCubeDef.qDimensions.length; j++){
-						var dimension = properties.qHyperCubeDef.qDimensions[j];
-						if(dimension.hasOwnProperty('qDef') && dimension.qDef.hasOwnProperty('qFieldLabels') && dimension.qDef.qFieldLabels.length == 1){
-							if(dimension.qDef.qFieldLabels[0] in dictionary){
-								patches.push({
-									"qPath" : "/qHyperCubeDef/qDimensions/" + j + "/qDef/qFieldLabels",
-									"qOp" : "replace",
-									"qValue" : "[\"" + dictionary[dimension.qDef.qFieldLabels[0]] + "\"]"
-								});
-							}
+		//check all subnodes of HyperCubeDefs ...
+		if(properties.hasOwnProperty('qHyperCubeDef')){	
+			//check all qMeasures
+			if(properties.qHyperCubeDef.hasOwnProperty('qMeasures')){
+				for(var j=0; j<properties.qHyperCubeDef.qMeasures.length; j++){
+					var measure = properties.qHyperCubeDef.qMeasures[j];
+					if(measure.hasOwnProperty('qDef') && measure.qDef.hasOwnProperty('qLabel')){
+						if(measure.qDef.qLabel in dictionary){
+							patches.push({
+								"qPath": "/qHyperCubeDef/qMeasures/" + j + "/qDef/qLabel",
+								"qOp": "replace",
+								"qValue": "\"" + dictionary[measure.qDef.qLabel] + "\""
+							});	
 						}
 					}
-					
-				}
-				
+				}	
 			}
+				
+			//check all qDimensions
+			if(properties.qHyperCubeDef.hasOwnProperty('qDimensions')){	
+				for(var j=0; j<properties.qHyperCubeDef.qDimensions.length; j++){
+					var dimension = properties.qHyperCubeDef.qDimensions[j];
+					if(dimension.hasOwnProperty('qDef') && dimension.qDef.hasOwnProperty('qFieldLabels') && dimension.qDef.qFieldLabels.length == 1){
+						if(dimension.qDef.qFieldLabels[0] in dictionary){
+							patches.push({
+								"qPath" : "/qHyperCubeDef/qDimensions/" + j + "/qDef/qFieldLabels",
+								"qOp" : "replace",
+								"qValue" : "[\"" + dictionary[dimension.qDef.qFieldLabels[0]] + "\"]"
+							});
+						}
+					}
+				}		
+			}	
+		}
 			
+		//needed for sheet	
+		if(properties.hasOwnProperty('qMetaDef')){
+			if(properties.qMetaDef.hasOwnProperty('title')){
+				if(properties.qMetaDef.title in dictionary){
+					patches.push(
+						{
+							'qPath': "/qMetaDef/title",
+							'qOp': 'replace',
+							'qValue': "\"" + dictionary[properties.qMetaDef.title] + "\""
+						}
+					);
+				}
+			}
+			if(properties.qMetaDef.hasOwnProperty('description')){
+				if(properties.qMetaDef.description in dictionary){
+					patches.push(
+						{
+							'qPath': "/qMetaDef/description",
+							'qOp': 'replace',
+							'qValue': "\"" + dictionary[properties.qMetaDef.description] + "\""
+						}
+					);
+				}
+			}
+		}
 		
 		return patches;
 	}
