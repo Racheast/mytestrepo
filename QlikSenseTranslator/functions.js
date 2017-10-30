@@ -211,5 +211,29 @@ module.exports = {
 		}
 		
 		return patches;
+	},
+	
+	getMeasureListProperties: function(){
+		return {
+			"qInfo": {
+				"qType": "MeasureList"
+			},
+			"qMeasureListDef": {
+				"qType": "measure",
+				"qData": {
+					"title": "/title",
+					"tags": "/tags"
+				}
+			}
+		}
+	},
+	
+	getMeasuresFromMeasureListLayout: function(app,layout) {
+		var tasks = [];
+		for (var i=0; i < layout.qMeasureList.qItems.length; i++) {
+			item = layout.qMeasureList.qItems[i];
+			tasks.push(app.getMeasure({qId:item.qInfo.qId}));
+		}
+		return tasks;
 	}
 }

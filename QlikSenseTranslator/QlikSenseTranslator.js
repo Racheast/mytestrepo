@@ -143,6 +143,9 @@ function translateSheet(app,sheetId) {
 		.then(async function(){  //translating all dimensions
 			return Promise.all(await getTranslationTasksForDimensions(app));
 		})
+		.then(async function(){  //translating all measures
+			await getTranslationTasksForMeasures(app);
+		})
 		.then(() => {
 			console.log("Trying doSave() ...");
 			return app.doSave();
@@ -158,9 +161,38 @@ function translateSheet(app,sheetId) {
 	});
 }
 
+function getTranslationTasksForMeasures(app) {
+	return new Promise(async function(resolve){
+		var measures = await getMeasures(app);
+		for(var i=0; i<measures.length; i++){
+			//TODO continue here with: getProperties, applyPatches, Promise.all()...
+			console.log("*** *** measure = " + Object.keys(measures[i]));
+		}
+		resolve();
+	});
+}
+
+function getMeasures(app) {
+	return new Promise(resolve => {
+		console.log("Trying to create measure list ... ");
+		app.createSessionObject(functions.getMeasureListProperties())
+		.then((measureList) => {
+			console.log("Measure List created.\nTrying to get layout from measureList ...");
+			return measureList.getLayout();
+		})
+		.then((layout) => {
+			console.log("Layout received.\Trying to get all measures ...");
+			return Promise.all(functions.getMeasuresFromMeasureListLayout(app,layout));
+		})
+		.then((measures) => {
+			resolve(measures);
+		});
+	});
+}
+
 function getTranslationTasksForDimensions(app) {
 	return new Promise(async function(resolve){
-		console.log("Starting getTranslationTakssForDimensions ...");
+		console.log("Starting getTranslationTasksForDimensions ...");
 		var tasks = [];
 		var dimensions = await getDimensions(app);
 		for(var i=0; i < dimensions.length; i++){
