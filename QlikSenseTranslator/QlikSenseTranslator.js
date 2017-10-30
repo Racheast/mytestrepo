@@ -133,47 +133,12 @@ function translateSheet(app,sheetId) {
 	return new Promise(resolve => {
 		console.log("Starting translateSheets() for sheetId " + sheetId + " ... ");
 
-		var objects = [];  //needed for further processing
 		var dimensions = [];  //needed for further processing
-		var sheet;
 		console.log("Trying to get sheet with id " + sheetId);
 		app.getObject({qId:sheetId})
-		/* WORKING CODE !!!
-		.then((sheet_received) => {  //sheet
-				sheet = sheet_received;
-				console.log("Sheet " + sheet.id + " received.");
-				console.log("Trying to getProperties() for sheet ...");
-				return sheet.getProperties();
-		})
-		.then((properties) => {
-			console.log("Properties received.");
-			console.log("Trying to apply patches on sheet ...");
-			var patches = functions.getApplyPatchesTaskForSheet(properties,dictionary);
-			if(patches.length > 0){	
-				return sheet.applyPatches(functions.getApplyPatchesTaskForSheet(properties,dictionary));
-			}
-		})
-		.then(() => {
-			return sheet.getLayout();
-		})
-		.then((layout) => {
-				console.log("Layout received.");
-				console.log("Trying to get all objects from layout ...");
-				return Promise.all(functions.getAllObjectsFromLayout(app, layout));
-		}).then(async function(objects_received){
-				console.log("All objects received.");
-				
-				var tasks = [];
-				for(var i=0; i<objects_received.length; i++){	
-					tasks.push(await getTranslationPatches(objects_received[i]));
-				}
-				return Promise.all(tasks);
-		})
-		*/
 		.then(async function(sheet){
-			var tasks = [];
-			tasks.push(await getTranslationTasksForObject(sheet));
-			return Promise.all(tasks);
+			console.log("Sheet " + sheetId + " received.\nTrying to recursively perform translation-tasks on all objects ... ");
+			return Promise.all(await getTranslationTasksForObject(sheet));
 		})
 		.then(() => {
 			console.log("Trying to create dimension list ...");
@@ -219,16 +184,19 @@ function translateSheet(app,sheetId) {
 
 function getTranslationTasksForObject(object){
 	return new Promise(resolve => {
+		console.log("Starting getTranslationTasksForObject() for object " + object.id + " ...\nTrying to get childInfos ...");
 		var tasks = [];
 		object.getChildInfos()
 		.then(async function(childInfos){
+			console.log("childInfos received.\nLooking for child objects ...");
 			for(var i=0; i<childInfos.length; i++){
 				var child = await getChild(object, childInfos[i].qId);
 				tasks.push(await getTranslationTasksForObject(child));
 			}
-				
+			console.log("Trying to get properties for object " + object.id + " ...");
 			return object.getProperties();
 		}).then((properties) => {
+			console.log("Properties received.\nGenerating patches for object " + object.id + " ...");
 			var patches = functions.getApplyPatchesForObject(properties, dictionary);	
 			if(patches.length > 0){	
 				tasks.push(object.applyPatches(patches));
@@ -241,8 +209,10 @@ function getTranslationTasksForObject(object){
 
 function getChild(object,qId){
 	return new Promise(resolve => {
+		console.log("Trying to get child " + qId + " of object " + object.id + " ...");
 		object.getChild(qId)
 		.then((child) => {
+			console.log("Child " + child.id + " received.");
 			resolve(child);
 		})
 	});
