@@ -88,36 +88,6 @@ module.exports = {
 		return tasks;
 	},
 	
-	getApplyPatchesTasksForDimensions: function(dimensions, propertiesArray, dictionary){
-		var tasks = [];
-		for(var i=0; i<propertiesArray.length; i++){
-			var properties = propertiesArray[i];
-			if(properties.qDim.title in dictionary){
-				var dimension = dimensions[properties.qInfo.qId];
-				var patches = [
-				{
-					'qPath': "/qDim/qFieldLabels",
-					'qOp': 'replace',
-					'qValue': "[\"" + dictionary[properties.qDim.title] + "\"]"
-				},
-				{
-					'qPath': "/qDim/title",
-					'qOp': 'replace',
-					'qValue': "\"" + dictionary[properties.qDim.title] + "\""
-				},
-				{
-					"qOp": "replace",
-					"qPath": "/qMetaDef/title",
-					"qValue": "\"" + dictionary[properties.qDim.title] + "\""
-				}
-				
-				];
-			tasks.push(dimension.applyPatches(patches));
-			}
-		}
-		return tasks;
-	},
-	
 	getApplyPatchesForDimension: function(properties, dictionary){
 		var patches = [];
 		if(properties.qDim.title in dictionary){

@@ -136,46 +136,13 @@ function translateSheet(app,sheetId) {
 		var dimensions = [];  //needed for further processing
 		console.log("Trying to get sheet with id " + sheetId);
 		app.getObject({qId:sheetId})
-		.then(async function(sheet){
+		.then(async function(sheet){  //translating sheet incl. all of its child-objects
 			console.log("Sheet " + sheetId + " received.\nTrying to recursively perform translation-tasks on all objects ... ");
 			return Promise.all(await getTranslationTasksForObject(sheet));
 		})
-		.then(async function(){
+		.then(async function(){  //translating all dimensions
 			return Promise.all(await getTranslationTasksForDimensions(app));
 		})
-		/*
-		.then(() => {
-			console.log("Trying to create dimension list ...");
-			return app.createSessionObject(functions.getDimensionListProperties());
-		})
-		.then((dimensionList) => {
-			console.log("Dimension list created.");
-			console.log("Trying to getLayout() from dimension list ...");
-			return dimensionList.getLayout();
-		})
-		.then((layout) => {
-			console.log("Layout received.");
-			console.log("Trying to get all dimensions ...");
-			return Promise.all(functions.getDimensionsFromDimensionListLayout(app,layout));
-		})
-		
-		.then((dimensions_received) => {
-			console.log("All dimensions received.");
-			console.log("Trying to getProperties() for all dimensions ...");
-			
-			return Promise.all(functions.getPropertiesForAllDimensions(dimensions, dimensions_received));
-		})
-		.then((propertiesArray) => {
-			console.log("All properties received.");
-			console.log("Trying to apply dimension patches ...");
-			
-			propertiesArray.forEach((prop)=>{
-				console.log("*** *** properties: qId: " + prop.qInfo.qId + ", title=" + prop.qDim.title + ", qFieldLabels: " + prop.qDim.qFieldLabels);
-			});
-			
-			return Promise.all(functions.getApplyPatchesTasksForDimensions(dimensions,propertiesArray,dictionary));
-		})
-		*/
 		.then(() => {
 			console.log("Trying doSave() ...");
 			return app.doSave();
@@ -198,20 +165,22 @@ function getTranslationTasksForDimensions(app) {
 		var dimensions = await getDimensions(app);
 		for(var i=0; i < dimensions.length; i++){
 			var properties = await getProperties(dimensions[i]);
+			console.log("Generating patch for dimension " + dimensions[i].id + " ...");
 			var patches = functions.getApplyPatchesForDimension(properties, dictionary);
 			if(patches.length > 0){
 				tasks.push(dimensions[i].applyPatches(patches));
 			}
 		}
-		console.log("*** *** resolving..");
 		resolve(tasks);
 	});
 }
 
 function getProperties(dimension){
 	return new Promise(resolve => {
+		console.log("Trying to get properties for dimension " + dimension.id + " ...");
 		dimension.getProperties()
 		.then((properties) => {
+			console.log("Properties for dimension " + dimension.id + " received.");
 			resolve(properties);
 		});
 	});
