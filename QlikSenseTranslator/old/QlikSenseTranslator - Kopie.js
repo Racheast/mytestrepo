@@ -129,7 +129,8 @@ function getAllSheetIds(app){
 		});
 	});
 }
-async function translateSheet(app,sheetId) {
+
+function translateSheet(app,sheetId) {
 	return new Promise(resolve => {
 		console.log("Starting translateSheets() for sheetId " + sheetId + " ... ");
 
@@ -159,39 +160,16 @@ async function translateSheet(app,sheetId) {
 				console.log("Layout received.");
 				console.log("Trying to get all objects from layout ...");
 				return Promise.all(functions.getAllObjectsFromLayout(app, layout));
-		}).then(async function(objects_received){
+		}).then((objects_received) => {
 				console.log("All objects received.");
-				//console.log("Trying to getProperties() of all objects");
-				//return Promise.all(functions.getPropertiesForAllObjects(objects,objects_received));
-				/*
-				USE RECURSIVE FUNCTION HERE !!
-				*/
-				/*
-				for(var i=0; i<objects_received.length; i++){
-					object = objects_received[i];
-					//getTranslationPatches(object,dictionary).then((s) => {console.log(x);return;});
-					await getTranslationPatches(object,dictionary);
-				}
-				*/
-				/*
-				return await objects_received.forEach(async function (object,i){
-					return await getTranslationPatches(object,dictionary);
-					console.log(i);
-				});
-				*/
-				var tasks = [];
-				for(var i=0; i<objects_received.length; i++){	
-					tasks.push(await getTranslationPatches(objects_received[i]));
-				}
-				return Promise.all(tasks);
+				console.log("Trying to getProperties() of all objects");
+				return Promise.all(functions.getPropertiesForAllObjects(objects,objects_received));
 		})
-		/* WORKING CODE
 		.then((propertiesArray) => {
 			console.log("All properties received.");
 			console.log("Trying to apply object patches ...");
 			return Promise.all(functions.getApplyPatchesTasksForObjects(objects,propertiesArray,dictionary));
 		})
-		*/
 		.then(() => {
 			console.log("Trying to create dimension list ...");
 			return app.createSessionObject(functions.getDimensionListProperties());
@@ -218,11 +196,11 @@ async function translateSheet(app,sheetId) {
 			
 			return Promise.all(functions.getApplyPatchesTasksForDimensions(dimensions,propertiesArray,dictionary));
 		})
+		
 		.then(() => {
 			console.log("Trying doSave() ...");
 			return app.doSave();
 		})
-		
 		.then(() => {
 			resolve();
 		})
@@ -233,41 +211,3 @@ async function translateSheet(app,sheetId) {
 		});
 	});
 }
-
-function getTranslationPatches(object){
-	return new Promise(resolve => {
-		var tasks = [];
-		
-		
-		object.getChildInfos()
-		.then(async function(childInfos){
-			console.log("*** *** childInfos : " + childInfos);
-			
-			for(var i=0; i<childInfos.length; i++){
-				var child = await getChild(object, childInfos[i].qId);
-				tasks.push(await getTranslationPatches(child));
-			}
-				
-			return object.getProperties();
-		}).then((properties) => {
-			var patches = functions.getApplyPatchesForObject(properties, dictionary);	
-			if(patches.length > 0){	
-				tasks.push(object.applyPatches(patches));
-			}
-			console.log("*** *** getTtranslationPatches: resolving ...");
-			resolve(tasks);
-		});
-		
-		
-	});
-}
-
-function getChild(object,qId){
-	return new Promise(resolve => {
-		object.getChild(qId)
-		.then((child) => {
-			resolve(child);
-		})
-	});
-}
-
