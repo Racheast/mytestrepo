@@ -163,12 +163,27 @@ function translateSheet(app,sheetId) {
 
 function getTranslationTasksForMeasures(app) {
 	return new Promise(async function(resolve){
+		var tasks = [];
 		var measures = await getMeasures(app);
 		for(var i=0; i<measures.length; i++){
 			//TODO continue here with: getProperties, applyPatches, Promise.all()...
-			console.log("*** *** measure = " + Object.keys(measures[i]));
+			var properties = await (function(measure){
+				return new Promise(resolve => {
+					console.log("Trying to get properties for measure " + measure.id + " ...");
+					measure.getProperties()
+					.then((properties) => {
+						console.log("Properties for measure " + measure.id + " received.");
+						resolve(properties);
+					});
+				});
+			})(measures[i]);
+			console.log("Generating patch for measure " + measures[i].id + " ...");
+			var patches = functions.getApplyPatchesForMeasure(properties, dictionary);
+			if(patches.length > 0){
+				tasks.push(measures[i].applyPatches(patches));
+			}
 		}
-		resolve();
+		resolve(tasks);
 	});
 }
 
@@ -196,7 +211,17 @@ function getTranslationTasksForDimensions(app) {
 		var tasks = [];
 		var dimensions = await getDimensions(app);
 		for(var i=0; i < dimensions.length; i++){
-			var properties = await getProperties(dimensions[i]);
+			var properties = await (function(dimension){
+				return new Promise(resolve => {
+					console.log("Trying to get properties for dimension " + dimension.id + " ...");
+					dimension.getProperties()
+					.then((properties) => {
+						console.log("Properties for dimension " + dimension.id + " received.");
+						resolve(properties);
+					});
+				});
+			})(dimensions[i]);
+			
 			console.log("Generating patch for dimension " + dimensions[i].id + " ...");
 			var patches = functions.getApplyPatchesForDimension(properties, dictionary);
 			if(patches.length > 0){
@@ -207,6 +232,7 @@ function getTranslationTasksForDimensions(app) {
 	});
 }
 
+/* WORKING CODE for getProperties(dimension); UNUSED;
 function getProperties(dimension){
 	return new Promise(resolve => {
 		console.log("Trying to get properties for dimension " + dimension.id + " ...");
@@ -217,7 +243,7 @@ function getProperties(dimension){
 		});
 	});
 }
-
+*/
 function getDimensions(app){
 	return new Promise(resolve => {
 		console.log("Trying to create dimension list ...");

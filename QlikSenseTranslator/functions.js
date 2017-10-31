@@ -235,5 +235,19 @@ module.exports = {
 			tasks.push(app.getMeasure({qId:item.qInfo.qId}));
 		}
 		return tasks;
+	},
+	
+	getApplyPatchesForMeasure: function(properties, dictionary){
+		var patches = [];
+		if(properties.qMetaDef.title in dictionary){
+			patches.push(
+				{
+					'qPath': "/qMetaDef/title",
+					'qOp': 'replace',
+					'qValue': "\"" + dictionary[properties.qMetaDef.title] + "\""
+				}
+			);
+		}
+		return patches;
 	}
 }
