@@ -19,9 +19,9 @@ d_Datum_Label;Datum;Date
 d_DatumUndProduktion_Label;Vorstellung;Performance
 d_Email_Label;E-Mail-Adresse;Email Address
 d_EMonat_Label;Kalendermonat;Calendar Month
-d_Ermaessigungstyp_Label;ErmÑssigungstyp;Discount Type
-d_ErmÑ·igung_Label;ErmÑ·igung;Discount
-d_ErmÑ·igungsgruppe_Label;ErmÑ·igungsgruppe;Discount Group
+d_Ermaessigungstyp_Label;Erm‰ssigungstyp;Discount Type
+d_Erm‰ﬂigung_Label;Erm‰ﬂigung;Discount
+d_Erm‰ﬂigungsgruppe_Label;Erm‰ﬂigungsgruppe;Discount Group
 d_Erstkauf_Label;Erstkauf;First Purchase
 d_Erstkaufsjahr_Label;Erstkaufsjahr;Year of First Purchase
 d_EWoche_Label;Woche;Woche
@@ -78,7 +78,7 @@ d_Saison_Label;Saison;Season
 d_Sektor_Label;Sektor;Sector
 d_Sequenznummer_Label;Laufnummer;Performance Number
 d_Serie_Label;Serie;Series
-d_Spielstaette_Label;SpielstÑtte;Venue
+d_Spielstaette_Label;Spielst‰tte;Venue
 d_Strasse_Label;Anschrift;Postal Address
 d_Tickettyp_Label;Tickettyp;Ticket Type
 d_Titel_Label;Titel;Title
@@ -93,7 +93,7 @@ d_WochenNachPremiere_Label;Wochen nach Premiere;Weeks after Premiere
 f_ABC_Label;ABC;Pareto
 f_Abos_Anzahl_Label;Abos;Season Tickets
 f_Auslastung_Belegung_Label;Belegung;Attendance
-f_Auslastung_Besucher_Gestern_Label;VerÑnderung zu Gestern;Amendments Since Yesterday
+f_Auslastung_Besucher_Gestern_Label;Ver‰nderung zu Gestern;Amendments Since Yesterday
 f_Auslastung_Besucher_Label;Auslastung;Utilization
 f_Auslastung_Finanziell_Label;Finanzielle Auslastung;Financial Utilization 
 f_Auslastung_Finanziell_Vortag_Label;Finanzielle Auslastung Vortag;Previous Day Financial Utilization
@@ -104,9 +104,9 @@ f_Distanz_Label;Distanz;Distance
 f_Durchschnitt_Frequenz_Label;Besuchsfrequenz;Attendance Frequency
 f_Durchschnitt_Frequenz_Label_s;Besuchsfreq.;
 f_Einzelkundenanzahl_Label;Anzahl urspr. Kunden;
-f_Kapazitaet_PlaetzeGesamt_Label;PlatzkapazitÑt;Seating Capacity
-f_Kapazitaet_PlaetzeJeVorstellung_Label;PlÑtze je Vorstellung;Seats per Performance
-f_Kapazitaet_Restplaetze_Label;RestplÑtze;Available Seats
+f_Kapazitaet_PlaetzeGesamt_Label;Platzkapazit‰t;Seating Capacity
+f_Kapazitaet_PlaetzeJeVorstellung_Label;Pl‰tze je Vorstellung;Seats per Performance
+f_Kapazitaet_Restplaetze_Label;Restpl‰tze;Available Seats
 f_Kunden_Anzahl_Label;Kunden;Customers
 f_Kunden_Dauer_Label;Dauer der Kundschaft;Time Since First Purchase
 f_Kunden_Dauer_Label_s;Dauer der Kundsch.;
@@ -133,7 +133,7 @@ f_Tickets_HorizontJeKunde_Label;Kaufzeitpunkt vor Vorstellung;Purchase Date by T
 f_Tickets_JeVorstellung_Label;Tickets je Vorstellung;Tickets per Performance
 f_Tickets_PlanErreichung_Label;Tickets Planerreichung;Tickets Goal Achievement
 f_Tickets_Reservierungen_Label;Reservierungen;Reservations
-f_Ueberfaellig_Label;öberfÑllig;Overdue
+f_Ueberfaellig_Label;öberf‰llig;Overdue
 f_Umsatz_Brutto_Anteil_Kumuliert_Label;Anteil kumuliert;Cumulative Percentage
 f_Umsatz_Brutto_Anteil_Label;Anteil an Gesamtumsatz;Percentage of Total Turnover
 f_Umsatz_Brutto_AnteilGruppe_Label;Anteil an Gesamtumsatz;Percentage of Total Turnover
@@ -155,19 +155,19 @@ o_BU09_Titel;Auswahl aufheben;Cancel Selection
 o_BU10_Titel;Weiter;Next
 o_BU102_Titel;Nach Produktion;By Production
 o_BU103_Titel;Nach Genre;By Genre
-o_BU104_Titel;Nach SpielstÑtte;By Venue
-o_BU108_Titel;SaalplÑne;Seat Maps
+o_BU104_Titel;Nach Spielst‰tte;By Venue
+o_BU108_Titel;Saalpl‰ne;Seat Maps
 o_BU11_Titel;ZurÅck;Back
 o_BU118_Titel;Auslastungen;Utilization
 o_BU119_Titel;Einzelne Vorstellung;Individual Performance
 o_BU120_Titel;Hot-Seats;Hot Seats
 o_BU124_Titel;Vorschaubericht;Preview Report
 o_BU125_Titel;Heute;Today
-o_BU128_Titel;NÑchste 30 Tage;Next 30 Days
+o_BU128_Titel;N‰chste 30 Tage;Next 30 Days
 o_BU129_Titel;Bis Monatsende;To Month End
 o_BU130_Titel;Bis Jahresende;To Year End
 o_BU131_Titel;Bis Saisonende;To End of Season
-o_BU132_Titel;NÑchste 7 Tage;Next 7 Days
+o_BU132_Titel;N‰chste 7 Tage;Next 7 Days
 o_BU142_Titel;AuslastungsÅbersicht;Utilization Overview
 o_BU143_Titel;Plan-Ist-Vergleich;Plan/Actual Comparison
 o_BU144_Titel;Ist-Vorjahr-Vergleich;Comparison with Previous Year Actual
@@ -175,19 +175,19 @@ o_BU152_Titel;Strukturanalyse;Structural Analysis
 o_BU160_Titel;Produktionen;Productions
 o_BU161_Titel;Preiskategorien;Price Categories
 o_BU162_Titel;Genres;Genres
-o_BU163_Titel;SpielstÑtten;Venues
+o_BU163_Titel;Spielst‰tten;Venues
 o_BU164_Titel;Wochentage;Days of Week
 o_BU165_Titel;Monate;Month
-o_BU167_Titel;VertriebskanÑle;Sales Channels
+o_BU167_Titel;Vertriebskan‰le;Sales Channels
 o_BU168_Titel;Jahre;Year
 o_BU169_Titel;Saison;Season
 o_BU17_Label;Dashboard;Dashboard
-o_BU179_Titel;ErmÑ·igungen;Discounts
+o_BU179_Titel;Erm‰ﬂigungen;Discounts
 o_BU18_Titel;Letzte 7 Tage;Last 7 Days
 o_BU180_Titel;Abonnenten;Season Ticket Holders
 o_BU181_Titel;Kaufhorizont;Purchase Horizon
 o_BU185_Titel;Matrixdarstellung;Matrix View
-o_BU187_Titel;UmsÑtze;Revenue
+o_BU187_Titel;Ums‰tze;Revenue
 o_BU188_Titel;Tickets;Tickets
 o_BU191_Titel;Verkaufsstand;Sales Status
 o_BU194_Titel;Platzkategorien;Seat Categories
@@ -200,14 +200,14 @@ o_BU205_Titel;Vorstellungszeitraum;Performance Period
 o_BU206_Titel;Vergleich Vorstellungs-/Buchungszeitraum;Compare Performance/Booking Period
 o_BU207_Titel;AuslastungsÅbersicht;Utilization Overview
 o_BU21_Titel;Seit Monatsbeginn;Since Start of Month
-o_BU213_Titel;VerkaufsverlÑufe;Sales Trend History
+o_BU213_Titel;Verkaufsverl‰ufe;Sales Trend History
 o_BU215_Titel;Verlaufsanalyse;Trend Analysis
 o_BU216_Titel;Vorstellungsvergleich;Performance Comparison
 o_BU22_Titel;Seit Jahresbeginn;Since Start of Year
 o_BU221_Titel;Vertrieb Flexi-Pivot-Tabelle;Sales Flexi Pivot Table
 o_BU24_Titel;Gestern;Yesterday
 o_BU25_Titel;Letzte 30 Tage;Last 30 Days
-o_BU263_Titel;ErmÑ·igungsgruppen;Discount Groups
+o_BU263_Titel;Erm‰ﬂigungsgruppen;Discount Groups
 o_BU264_Titel;Tickettypen;Ticket Types
 o_BU27_Titel;Vorstellungsbericht;Performance Report
 o_BU270_Titel;Kumuliert;Cumulative
@@ -250,10 +250,10 @@ o_BU434_Titel;Erstkaufjahr;Year of First Purchase
 o_BU435_Titel;Geschlecht/Typ;Gender/Type
 o_BU436_Titel;Alter;Age
 o_BU51_Titel;Vorheriger Auswahlstatus;Previous Selection Status
-o_BU52_Titel;NÑchster Auswahlstatus;Next Selection Status
+o_BU52_Titel;N‰chster Auswahlstatus;Next Selection Status
 o_BU530_Titel;öberblick;Overview
 o_BU548_Titel;Anteil weiblicher Kunden;Proportion of Female Customers
-o_BU556_Titel;Anteil mÑnnlicher Kunden;Proportion of Male Customers
+o_BU556_Titel;Anteil m‰nnlicher Kunden;Proportion of Male Customers
 o_BU558_Titel;Anteil Firmenkunden;Proportion of Corporate Customers
 o_BU563_Titel;Nach Saison;By Season
 o_BU564_Titel;Nach Kalenderjahr;By Calendar Year
@@ -282,9 +282,9 @@ o_BU730_Titel;Newsletter Report;Newsletter Report
 o_BU732_Titel;Kundenauswahl fixieren;Set Customer Selection
 o_BU738_Titel;Kundenzusammenlegung;Customer Aggregation
 o_BU743_Titel;Dubletten aus dem Ticketsystem;Duplicates from Ticket System
-o_BU744_Titel;DublettenvorschlÑge;Potential Duplicates
+o_BU744_Titel;Dublettenvorschl‰ge;Potential Duplicates
 o_BU747_Titel;Kundenzusammenlegung;Customer Aggregation
-o_BU749_Titel;Weitere Kunden ausschlie·en;Exclude More Customers
+o_BU749_Titel;Weitere Kunden ausschlieﬂen;Exclude More Customers
 o_BU751_Titel;Nur Besucher;Attendees Only
 o_BU84_Titel;öberblick;Overview
 o_BU85_Titel;Vergleiche;Comparisons
@@ -294,7 +294,7 @@ o_BU94_Titel;Nach Wochentag;By Day of Week
 o_BU95_Titel;Vorjahresvergleich;Comparison with Previous Year
 o_CH20_Titel;Bisher verkauft;Sold to Date
 o_CH21_Titel;Aktuell verkauft;Currently Sold
-o_CH22_Titel;RestplÑtze;Remaining Seats
+o_CH22_Titel;Restpl‰tze;Remaining Seats
 o_CH23_Titel;Vollpreis;Full Price
 o_CH24_Titel;1 - 25 % Rabatt;1 - 25 % Discount
 o_CH25_Titel;26 - 50 % Rabatt;26 - 50 % Discount
@@ -309,10 +309,10 @@ o_CH33_Titel;Letzter Monat;Last Month
 o_CH34_Titel;Letzte 3 Monate;Last 3 months
 o_CH35_Titel;Letztes Halbjahr;Last 6 months
 o_CH36_Titel;Zuvor;Earlier
-o_CH37_Titel;ErmÑ·igt;Aggregated
+o_CH37_Titel;Erm‰ﬂigt;Aggregated
 o_CH38_Titel;Verkaufte Tickets;Sold Tickets
 o_CH39_Titel;Abgespielte Tickets;Used Tickets
-o_CH40_Titel;SitzplÑtze;Seats
+o_CH40_Titel;Sitzpl‰tze;Seats
 o_CH41_Titel;Reserviert;Reserved
 o_CH42_Titel;Besuche;Attendances
 o_CH43_Titel;Gekaufte Tickets;Purchased Tickets
@@ -323,16 +323,16 @@ o_CH47_Titel;Link zu CRM;Link to CRM
 o_CS01_Titel;Auswahlstatus;Selection Status
 o_DI01;Vorsaison;Previous Season
 o_DI02;Unterschied;Difference
-o_DI03;KapazitÑt;Capacity
+o_DI03;Kapazit‰t;Capacity
 o_DI04;Plan;Plan
 o_DI05;Gesamt;Total
 o_DI06;Vorjahr;Previous Year
 o_DI07;Zeile;Row
 o_SO01_Label;Suche in allen Feldern;Search in All Fields
-o_SO02_Label;Bitte wÑhlen Sie eine Vorstellung aus.;Please select a performance.
-o_SO03_Label;Bitte wÑhlen Sie einen Saal aus.;Please select a space.
+o_SO02_Label;Bitte w‰hlen Sie eine Vorstellung aus.;Please select a performance.
+o_SO03_Label;Bitte w‰hlen Sie einen Saal aus.;Please select a space.
 o_SO04_Label;Kundensuche;Customer Search
-o_SO05_Label;Bitte wÑhlen Sie einen einzelnen Kunden aus.;Please select a customer.
+o_SO05_Label;Bitte w‰hlen Sie einen einzelnen Kunden aus.;Please select a customer.
 o_SO06_Label;Zur Anzeige der Kaufintervalle mÅssen mindestens zwei Besuche vorhanden sein.;There must be at least two attendances in order to display purchase intervals.
 o_SO07_Label;FÅr diesen Kunden liegen keine Geo-Informationen vor.;There is no geodata for these customers.
 o_SO08_Label;Suche in Zeitfeldern;Search in Time Fields
@@ -349,14 +349,14 @@ o_SO18_Label;Durchschnitt;Average
 o_SO19_Label;Zur Anzeige der Kaufzeitpunkte mÅssen mindestens zwei Besuche vorhanden sein.;There must be at least two attendances in order to display purchase dates.
 o_SO20_Label;% Auslastung;% Utilization
 o_SO21_Label;? Umsatz;Turnover
-o_SO22_Label;% ErmÑ·igung;% Discount
+o_SO22_Label;% Erm‰ﬂigung;% Discount
 o_SO23_Label;Tage vor Vorstellung;Days Before Performance
 o_SO24_Label;% Anteil;% Share
 o_SO25_Label;% Anteil;% Share
 o_SO26_Label;% Anteil;% Share
 o_SO27_Label;Jahre;Years
 o_SO28_Label;Tage;Days
-o_SO29_Label;% ErmÑ·igung;% Discount
+o_SO29_Label;% Erm‰ﬂigung;% Discount
 o_SO30_Label;Tage;Days
 o_SO31_Label;Untergrenze;Lower Limit
 o_SO32_Label;Obergrenze;Upper Limit
@@ -374,29 +374,29 @@ o_SO43_Label;Von;From
 o_SO44_Label;Bis;To
 o_SO45_Titel;Anzahl betroffener Kunden;Number of Customers Found
 o_SO46_Titel;Anzahl Gruppen;Number of Groups
-o_SO47_Titel;Durchschnittliche Gruppengrî·e;Average Group Size
-o_SO48_Titel;Maximale Gruppengrî·e;Maximum Group Size
+o_SO47_Titel;Durchschnittliche Gruppengrîﬂe;Average Group Size
+o_SO48_Titel;Maximale Gruppengrîﬂe;Maximum Group Size
 o_SO49_Titel;Anteil der Reduktion;Selection Percentage Reduction
 o_SO50_Titel;Reduzierte Kunden;Reduced Customer Selection
 o_SO51_Titel;zum CRM-Eintrag;to CRM entry
 o_SO52_Titel;Auswahl;Selection
 o_SO53_Titel;Ausschluss;Exclusion
-o_SO54_Titel;öbertragung ausstÑndig;Transfer Pending
+o_SO54_Titel;öbertragung ausst‰ndig;Transfer Pending
 o_SO55_Titel;Manuelle Eingabe:;Manual Entry:
 o_SO56_Titel;Zeitraum fÅr Kauf (in Tagen):;Purchase Period (in days):
 o_TB_Gesamt;Gesamttickets;Total Tickets
-o_TB_Plaetze;PlÑtze;Seats
+o_TB_Plaetze;Pl‰tze;Seats
 o_TB_RevPasBrutto;Umsatz je Sitzplatz;Turnover by Seat
 o_TB_Tickets;Tickets;Tickets
 o_TB_Tickets_Gestern;Verkauf Gestern;Yesterday's Sales
 o_TB_Umsatz;Umsatz;Turnover
 o_TB_UmsatzJeTicket;Umsatz je Ticket;Turnover by ticket
 o_TB_Vorschau_Tickets;Tickets;Tickets
-o_TT_ABC;Hinweis: Passen\nSie die Gruppen an die\ngeÑnderte Auswahl an.;Note: Adjust\nthe groups based on \nthe new selection.
+o_TT_ABC;Hinweis: Passen\nSie die Gruppen an die\nge‰nderte Auswahl an.;Note: Adjust\nthe groups based on \nthe new selection.
 o_TT_FlexiPivot;Tipp: Speichern\nSie Ihre Auswahl als\nLesezeichen ab;Hint: Save your selection as a bookmark
-o_TT_JahresÅbersicht;Tipp: SchrÑnken\nSie die Daten auf ein\nbestimmtes Jahr ein;Hint: Restrict the data to a specific year
-o_TT_Lebenszyklus;Tipp: Schlie·en\nSie Fixabos und Ñhnliche\nKarten aus um ein akkurateres\nBild zu erhalten;Hint: Close fixed price season tickets ?? and similar cards to get an accurate picture
-o_TT_Verlaufsanalyse;Tipp: WÑhlen\nSie Vorstellungen oder Pro-\nduktionen von Interesse;Hint: Select performances or productions of interest
+o_TT_JahresÅbersicht;Tipp: Schr‰nken\nSie die Daten auf ein\nbestimmtes Jahr ein;Hint: Restrict the data to a specific year
+o_TT_Lebenszyklus;Tipp: Schlieﬂen\nSie Fixabos und ‰hnliche\nKarten aus um ein akkurateres\nBild zu erhalten;Hint: Close fixed price season tickets ?? and similar cards to get an accurate picture
+o_TT_Verlaufsanalyse;Tipp: W‰hlen\nSie Vorstellungen oder Pro-\nduktionen von Interesse;Hint: Select performances or productions of interest
 u_Blatt_Label;öbersicht;Overview
 u_Dashboard_SelektionAktiv_Label;Gestern;Yesterday
 u_Dashboard_SelektionVergleich_Label;Vergleich Vorgestern;Compare Day Before Yesterday
@@ -407,9 +407,9 @@ o_SO71_Titel;Filterauswahl;Filter Selection
 o_SO72_Titel;Tipp;Hint
 o_SO73_Titel;Finanzielle Auslastung;Financial Utilization
 o_SO74_Titel;Benutzerdefinierter Zeitraum;User-Defined Period
-o_SO75_Titel;Keine EinschrÑnkung;No Restriction
+o_SO75_Titel;Keine Einschr‰nkung;No Restriction
 o_SO76_Titel;Benutzerdefiniert;User-Defined
-o_TT_Saalplan;Bitte wÑhlen Sie mit dem Filter auf der linken Seite nur eine Vorstellung aus.;Please select only one performance using the filter on the left.
+o_TT_Saalplan;Bitte w‰hlen Sie mit dem Filter auf der linken Seite nur eine Vorstellung aus.;Please select only one performance using the filter on the left.
 o_SO77_Titel;Abgespielt;Used
 o_SO78_Titel;Bevorstehend;Forthcoming
 o_SO79_Titel;Bislang;To Date
