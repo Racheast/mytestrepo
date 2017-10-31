@@ -132,8 +132,6 @@ function getAllSheetIds(app){
 function translateSheet(app,sheetId) {
 	return new Promise(resolve => {
 		console.log("Starting translateSheets() for sheetId " + sheetId + " ... ");
-
-		var dimensions = [];  //needed for further processing
 		console.log("Trying to get sheet with id " + sheetId);
 		app.getObject({qId:sheetId})
 		.then(async function(sheet){  //translating sheet incl. all of its child-objects
@@ -271,7 +269,6 @@ function getTranslationTasksForObject(object){
 		.then(async function(childInfos){
 			console.log("childInfos received.\nLooking for child objects ...");
 			for(var i=0; i<childInfos.length; i++){
-				//var child = await getChild(object, childInfos[i].qId);
 				var child = await (function(object,qId){
 					return new Promise(resolve => {
 						console.log("Trying to get child " + qId + " of object " + object.id + " ...");
