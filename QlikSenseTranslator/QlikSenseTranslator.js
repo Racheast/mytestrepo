@@ -144,7 +144,7 @@ function translateSheet(app,sheetId) {
 			return Promise.all(await getTranslationTasksForDimensions(app));
 		})
 		.then(async function(){  //translating all measures
-			await getTranslationTasksForMeasures(app);
+			return Promise.all(await getTranslationTasksForMeasures(app));
 		})
 		.then(() => {
 			console.log("Trying doSave() ...");
@@ -166,7 +166,6 @@ function getTranslationTasksForMeasures(app) {
 		var tasks = [];
 		var measures = await getMeasures(app);
 		for(var i=0; i<measures.length; i++){
-			//TODO continue here with: getProperties, applyPatches, Promise.all()...
 			var properties = await (function(measure){
 				return new Promise(resolve => {
 					console.log("Trying to get properties for measure " + measure.id + " ...");
@@ -177,7 +176,7 @@ function getTranslationTasksForMeasures(app) {
 					});
 				});
 			})(measures[i]);
-			console.log("Generating patch for measure " + measures[i].id + " ...");
+			console.log("Trying to generate patch for measure " + measures[i].id + " ...");
 			var patches = functions.getApplyPatchesForMeasure(properties, dictionary);
 			if(patches.length > 0){
 				tasks.push(measures[i].applyPatches(patches));
@@ -272,13 +271,23 @@ function getTranslationTasksForObject(object){
 		.then(async function(childInfos){
 			console.log("childInfos received.\nLooking for child objects ...");
 			for(var i=0; i<childInfos.length; i++){
-				var child = await getChild(object, childInfos[i].qId);
+				//var child = await getChild(object, childInfos[i].qId);
+				var child = await (function(object,qId){
+					return new Promise(resolve => {
+						console.log("Trying to get child " + qId + " of object " + object.id + " ...");
+						object.getChild(qId)
+						.then((child) => {
+							console.log("Child " + child.id + " received.");
+							resolve(child);
+						})
+					});
+				})(object, childInfos[i].qId);
 				tasks.push(await getTranslationTasksForObject(child));
 			}
 			console.log("Trying to get properties for object " + object.id + " ...");
 			return object.getProperties();
 		}).then((properties) => {
-			console.log("Properties received.\nGenerating patches for object " + object.id + " ...");
+			console.log("Properties received.\nTrying to generate patches for object " + object.id + " ...");
 			var patches = functions.getApplyPatchesForObject(properties, dictionary);	
 			if(patches.length > 0){	
 				tasks.push(object.applyPatches(patches));
@@ -288,7 +297,7 @@ function getTranslationTasksForObject(object){
 		
 	});
 }
-
+/* WORKING CODE; UNUSED;
 function getChild(object,qId){
 	return new Promise(resolve => {
 		console.log("Trying to get child " + qId + " of object " + object.id + " ...");
@@ -299,4 +308,4 @@ function getChild(object,qId){
 		})
 	});
 }
-
+*/
