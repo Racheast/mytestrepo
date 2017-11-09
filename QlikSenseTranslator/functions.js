@@ -181,7 +181,20 @@ module.exports = {
 						}
 					}
 				}		
-			}	
+			}
+
+			//check customErrorMessage
+			if(properties.qHyperCubeDef.hasOwnProperty('customErrorMessage')){
+				if(properties.qHyperCubeDef.customErrorMessage.hasOwnProperty('calcCond')){
+					if(properties.qHyperCubeDef.customErrorMessage.calcCond in dictionary){
+						patches.push({
+							"qOp": "replace",
+							"qPath": "/qHyperCubeDef/customErrorMessage/calcCond",
+							"qValue": "\"" + dictionary[properties.qHyperCubeDef.customErrorMessage.calcCond] + "\""
+						});
+					}
+				}
+			}
 		}
 			
 		//needed for sheet	

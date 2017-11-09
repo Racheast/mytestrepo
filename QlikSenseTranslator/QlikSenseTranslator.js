@@ -40,7 +40,7 @@ async function start() {
 	var app = await getApp(global);
 	var sheetIds = await getAllSheetIds(app);
 	for(var i=0; i<sheetIds.length; i++){
-		await translateSheet(app,sheetIds[i]);
+			await translateSheet(app,sheetIds[i]);
 	}
 	console.log("Closing the session ...");
 	session.close();
