@@ -12,16 +12,19 @@ e.g.: "C:\\Users\\MaxMuster\\Documents\\Qlik\\Sense\\Apps\\"
 
 1.c) specify a path for the csv file. The csv file should be stored e.g. in the csv folder for convenience. 
 Use the following filepath-format: "./csv/mycsv.csv"
+WARNING: Make sure that the csv-file is encoded in UTF-8 without BOM !
 
 2.) Make sure that Qlik Sense Desktop is running and an admin user is logged in.
 
 3.) Go to the folder QlikSenseTranslator, press "shift" and "right mouse click" and select the option to open the Command Prompt out of this directory.
 
 4.) Translate the source app: 
-(Only "DE" and "EN" are supported so far...)
+(Only "DE", "EN", "FR" are supported so far...)
 
 4.a) Enter the following command for translating the source app to German: 
 	node QlikSenseTranslator "DE"
 
 4.b) -,,- to English:
 	node QlikSenseTranslator "EN"
+
+4.x) ...
