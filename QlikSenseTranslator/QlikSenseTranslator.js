@@ -39,6 +39,8 @@ async function start() {
 	var global = await openConnection(session);
 	var app = await getApp(global);
 	var sheetIds = await getAllSheetIds(app);
+	await translateDimensions(app);
+	await translateMeasures(app);
 	for(var i=0; i<sheetIds.length; i++){
 			await translateSheet(app,sheetIds[i]);
 	}
@@ -57,7 +59,7 @@ function copyApp(){
 	});
 }
 
-//IMPORTANT: Make sure, that the csv-file is encoded in "UTF-8" or "UTF-8 without BOM"
+//IMPORTANT: Make sure that the csv-file is encoded in "UTF-8" or "UTF-8 without BOM"
 function writeDictionary(){
 	return new Promise(resolve => {
 		csv
@@ -132,6 +134,17 @@ function getAllSheetIds(app){
 		});
 	});
 }
+
+async function translateDimensions(app){
+	console.log("Starting translateDimensions ...");
+	return Promise.all(await getTranslationTasksForDimensions(app));
+}
+
+async function translateMeasures(app){
+	console.log("Starting translateMeasures ...");
+	return Promise.all(await getTranslationTasksForMeasures(app));
+}
+
 function translateSheet(app,sheetId) {
 	return new Promise(resolve => {
 		console.log("Starting translateSheets() for sheetId " + sheetId + " ... ");
@@ -141,12 +154,14 @@ function translateSheet(app,sheetId) {
 			console.log("Sheet " + sheetId + " received.\nTrying to recursively perform translation-tasks on all objects ... ");
 			return Promise.all(await getTranslationTasksForObject(sheet));
 		})
+		/* WORKING CODE; INEFFICIENT;
 		.then(async function(){  //translating all dimensions
 			return Promise.all(await getTranslationTasksForDimensions(app));
 		})
 		.then(async function(){  //translating all measures
 			return Promise.all(await getTranslationTasksForMeasures(app));
 		})
+		*/
 		.then(() => {
 			console.log("Trying doSave() ...");
 			return app.doSave();
