@@ -223,6 +223,40 @@ module.exports = {
 			}
 		}
 		
+		//check refLine
+		if(properties.hasOwnProperty('refLine')){
+			//check refLinesX
+			if(properties.refLine.hasOwnProperty('refLinesX')){
+				for(var i=0;i<properties.refLine.refLinesX.length;i++){
+					var refLineX = properties.refLine.refLinesX[i];
+					if(refLineX.hasOwnProperty('label')){
+						if(refLineX.label in dictionary){
+							patches.push({
+								"qOp": "replace",
+								"qPath": "/refLine/refLinesX/"+i+"/label",
+								"qValue": "\"" + dictionary[refLineX.label] + "\""
+							});
+						}
+					}
+				}
+			}
+			//check refLinesY
+			if(properties.refLine.hasOwnProperty('refLinesY')){
+				for(var i=0;i<properties.refLine.refLinesY.length;i++){
+					var refLineY = properties.refLine.refLinesY[i];
+					if(refLineY.hasOwnProperty('label')){
+						if(refLineY.label in dictionary){
+							patches.push({
+								"qOp": "replace",
+								"qPath": "/refLine/refLinesY/"+i+"/label",
+								"qValue": "\"" + dictionary[refLineY.label] + "\""
+							});
+						}
+					}
+				}
+			}
+		}
+		
 		return patches;
 	},
 	
