@@ -15,9 +15,9 @@ const session = enigma.create({
   createSocket: url => new WebSocket(url)
 });
 
-session.on('traffic:sent', data => console.log('sent:', data));
+session.on('traffic:sent', data => console.log('sent:', JSON.stringify(data)));
 session.on('traffic:received', data => {
-	console.log('received:', data);
+	console.log('received:', JSON.stringify(data));
 });
 
 if(process.argv.length == 3 ){

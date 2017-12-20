@@ -148,8 +148,63 @@ module.exports = {
 				});		
 			}	
 		}
-			
-		//check all subnodes of HyperCubeDefs ...
+		
+		//check all layers
+		if(properties.hasOwnProperty('layers')){
+			for(var i=0; i<properties.layers.length; i++){
+				var layer = properties.layers[i];
+				
+				//check all subnodes of HyperCubeDefs
+				if(layer.hasOwnProperty('qHyperCubeDef')){	
+					//check all qMeasures
+					if(layer.qHyperCubeDef.hasOwnProperty('qMeasures')){
+						for(var j=0; j<layer.qHyperCubeDef.qMeasures.length; j++){
+							var measure = layer.qHyperCubeDef.qMeasures[j];
+							if(measure.hasOwnProperty('qDef') && measure.qDef.hasOwnProperty('qLabel')){
+								if(measure.qDef.qLabel in dictionary){
+									patches.push({
+										"qPath": "/layers/" + i + "/qHyperCubeDef/qMeasures/" + j + "/qDef/qLabel",
+										"qOp": "replace",
+										"qValue": "\"" + dictionary[measure.qDef.qLabel] + "\""
+									});	
+								}
+							}
+						}	
+					}
+						
+					//check all qDimensions
+					if(layer.qHyperCubeDef.hasOwnProperty('qDimensions')){	
+						for(var j=0; j<layer.qHyperCubeDef.qDimensions.length; j++){
+							var dimension = layer.qHyperCubeDef.qDimensions[j];
+							if(dimension.hasOwnProperty('qDef') && dimension.qDef.hasOwnProperty('qFieldLabels') && dimension.qDef.qFieldLabels.length == 1){
+								if(dimension.qDef.qFieldLabels[0] in dictionary){
+									patches.push({
+										"qPath" : "/layers/" + i + "/qHyperCubeDef/qDimensions/" + j + "/qDef/qFieldLabels",
+										"qOp" : "replace",
+										"qValue" : "[\"" + dictionary[dimension.qDef.qFieldLabels[0]] + "\"]"
+									});
+								}
+							}
+						}		
+					}
+
+					//check customErrorMessage
+					if(layer.qHyperCubeDef.hasOwnProperty('customErrorMessage')){
+						if(layer.qHyperCubeDef.customErrorMessage.hasOwnProperty('calcCond')){
+							if(layer.qHyperCubeDef.customErrorMessage.calcCond in dictionary){
+								patches.push({
+									"qOp": "replace",
+									"qPath": "/layers/" + i + "/qHyperCubeDef/customErrorMessage/calcCond",
+									"qValue": "\"" + dictionary[layer.qHyperCubeDef.customErrorMessage.calcCond] + "\""
+								});
+							}
+						}
+					}
+				}
+			}
+		}	
+		
+		//check all subnodes of HyperCubeDefs
 		if(properties.hasOwnProperty('qHyperCubeDef')){	
 			//check all qMeasures
 			if(properties.qHyperCubeDef.hasOwnProperty('qMeasures')){
