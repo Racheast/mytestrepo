@@ -257,7 +257,7 @@ o_BU566_Titel;Preiskategorien;Price Categories;Catégorie de prix
 o_BU591_Titel;Vorstellungszeitraum;Performance Period;Date de début de la séance
 o_BU592_Titel;Buchungszeitraum;Booking Period;Période de la réservation
 o_BU596_Titel;YTD;YTD;YTD
-o_BU687_Titel;Kennzeichen;Criteria;ICPs
+o_BU687_Titel;Kennzeichen;Criteria;signe distinctif
 o_BU689_Titel;Nachbarschaft ausblenden;Hide Adjacent Areas;Cacher les zones adjacentes
 o_BU695_Titel;ABC-Analyse;ABC Analysis;Analyse ABC
 o_BU701_Titel;Kundenlimit;Customer Limit;Limite contact
@@ -312,7 +312,7 @@ o_CH40_Titel;Sitzplätze;Seats;Sièges
 o_CH41_Titel;Reserviert;Reserved;Réservé
 o_CH42_Titel;Besuche;Attendances;Nb de visites
 o_CH43_Titel;Gekaufte Tickets;Purchased Tickets;Billets achetés
-o_CH44_Titel;Konsumierte Tickets;Used Tickets;
+o_CH44_Titel;Konsumierte Tickets;Used Tickets;billet usée
 o_CH45_Titel;Ursprüngliche Idealeinnahme;Original Ideal Revenue;CA idéal d'origine
 o_CH46_Titel;Besuche;Attendances;Nb de visites
 o_CH47_Titel;Link zu CRM;Link to CRM;Lien vers SAM
@@ -473,6 +473,14 @@ o_BU854_Titel;Wahlabos und Fix-Preis-Abos;Calculated Price and Fixed Price Seaso
 o_BU855_Titel;Abo Analyse;Season Ticket Analysis;Analyse des abonnements
 o_BU856_Titel;Wahlabos - Details;Calculated Price Season Tickets - Details;Abonnements prix calculés - Détails
 o_BU857_Titel;Wahlabo;Calculated Price Season Tickets;Abonnements à prix calculés
-o_BU858_Titel;Gesamtwerte;Aggregated Values;
-d_Package_Label;;Package Name;
-f_Packages_Anzahl_Label;;Packages;
+o_BU858_Titel;Gesamtwerte;Aggregated Values;Valeur totale
+d_Package_Label;Package Name;Package Name;Noms produits composés
+f_Packages_Anzahl_Label;Packages;Packages;Produit composés
+o_BU859_Titel;Package Report;Package Report;Etat produit composés
+o_BU860_Titel;Einnahmen pro Package;Revenue per Package;CA par produit composé
+o_BU861_Titel;Abo Verkäufe;Season Ticket Sales;Ventes d'abonnements
+o_BU862_Titel;Ticket Verkäufe;Ticket Sales;Ventes de billets
+o_BU863_Titel;Fixpreis Abo Tickets;Fixed Price Season Tickets;Abonnements prix fixe
+o_BU864_Titel;Einnahmen je Abo;Revenue per Season Ticket;CA par abonnement
+o_BU865_Titel;Durchschnittliche Anzahl an Tickets;Average Number of Tickets;Nombre moyen de billets
+o_BU866_Titel;TitelZumTesten;titleForTesting;testTitleFR
